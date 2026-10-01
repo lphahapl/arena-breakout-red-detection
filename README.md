@@ -2,15 +2,18 @@
 
 通过 Windows 屏幕截图识别暗区突围保险箱中的红色稀有度物品，自动记录每次检测运行、开箱会话、出红结果和截图，并提供网页历史记录与人工复核。
 
-当前最新正式版是 **Rust v0.3.3，Windows x64**。**Python v0.2.2 暂时标记废弃，停止更新；后续只维护 Rust。** 仓库保留 Python 和各历史版本源码用于归档。实现采用 Windows OCR、图像颜色与几何规则、模板跟踪和多帧确认，识别过程在本机完成。
+当前最新正式版是 **Rust v0.3.4，Windows x64**。**Python v0.2.2 暂时标记废弃，停止更新；后续只维护 Rust。** 仓库保留 Python 和各历史版本源码用于归档。实现采用 Windows OCR、图像颜色与几何规则、模板跟踪和多帧确认，识别过程在本机完成。
 
 - [最新 Release](https://github.com/lphahapl/arena-breakout-red-detection/releases/latest)
-- [Rust v0.3.3 Windows x64 下载](https://github.com/lphahapl/arena-breakout-red-detection/releases/download/v0.3.3/arena-breakout-red-detection-v0.3.3-windows-x64.zip)
+- [Rust v0.3.4 Windows x64 下载](https://github.com/lphahapl/arena-breakout-red-detection/releases/download/v0.3.4/arena-breakout-red-detection-v0.3.4-windows-x64.zip)
+- [v0.3.4 崩溃修复验证](docs/v0.3.4验证.md)
 - [v0.3.3 验证报告](docs/v0.3.3验证.md)
 - [Python 废弃说明](PYTHON_DEPRECATED.md)
 - [检测验证报告](docs/验证报告.md)
 - [OCR 环境准备验证](docs/环境检测验证.md)
 - [源码归档与版本来源](docs/源码归档验证.md)
+
+**v0.3.4 修复了开始检测后后台访问异常退出、网页显示 Failed to fetch 的问题。v0.3.3 用户应升级后使用新程序打开的页面。**
 
 ## 1. 使用方式与统计范围
 
@@ -233,6 +236,12 @@ PNG 留在文件系统，数据库保存事件和截图文件名。截图采用�
 
 当前没有自动根据复核标签训练模型或改变阈值。人工复核用于整理证据和后续规则回归。
 
+### 网页断连与 v0.3.4 修复
+
+旧版准备环境的线程退出后，Windows OCR 工厂缓存可能失效；下一次真实开始检测会触发 0xc0000005，导致后台退出。v0.3.4 在主线程保持 WinRT MTA 有效，并通过线程绑定守卫配对每个 OCR Engine 的初始化和释放。先释放 OCR 对象，再释放所属线程的初始化。
+
+现在断连会显示中文恢复说明；请确认程序仍在运行，重开时使用它新打开的网页。连接恢复后清除连接提示。修复验证使用真实可见测试窗口和实际 OCR，并覆盖环境线程退出、连续启停、环境重试及并发历史访问。
+
 ### 个人最高爆率：连续十箱
 
 在所有历史运行里，分别按事件序号寻找同一次运行内连续十个完整结算保险箱，取出红率最高的一组。实现使用 `native/src/stats.rs` 的滑动窗口。
@@ -377,6 +386,7 @@ native/target/release/ab-red-detect.exe --data-dir test-data --port 17945 --no-b
 | `storage.py` / `native/src/storage.rs` | SQLite、旧记录导入、统计和复核 |
 | `environment.py` / `native/src/environment.rs` / `environment.ps1` | OCR 检查、安装状态和重试 |
 | `webui.py` / `history_ui.py` / `native/assets/` | 控制页与历史页 |
+| `native/src/runtime.rs` | Windows Runtime 生命周期和线程绑定守卫 |
 | `native/src/stats.rs` | 连续十箱成绩与窗口边界 |
 | `native/src/feedback.rs` | 单次运行反馈快照与流式 ZIP 导出 |
 | `tests/fixtures/` | 真实面板与颜色/形状回归样本 |
@@ -408,7 +418,10 @@ native/target/release/ab-red-detect.exe --data-dir test-data --port 17945 --no-b
 cargo test --locked --manifest-path native/Cargo.toml
 cargo build --release --locked --manifest-path native/Cargo.toml
 python tests/native_features_qa.py
+python tests/native_live_qa.py
 ```
+
+`native_live_qa.py` 在 Windows 上短暂显示独立测试窗口，要求可用中文 OCR 和开发用 Python/Tk；全部测试记录写入临时目录。旧 v0.3.3 在这个实际启停回归中崩溃，v0.3.4 通过。
 
 `native_features_qa.py` 只使用 Python 标准库作为开发测试工具；发布程序不需要 Python。它启动实际 exe，检查十箱统计边界、人工复核独立性、重启保留、ZIP 压缩与 CRC、证据内容、无历史导出和路径校验。
 
@@ -446,6 +459,7 @@ v0.3.3 未调整图像检测判据，没有重新完整播放四段视频，也�
 | `version/v0.3.1` | Rust 原生版源码快照，增加环境准备 |
 | `version/v0.2.2` | Python 源码快照，增加 JSON 屏蔽词与每次开始重读 |
 | `version/v0.3.2` | Rust JSON 词表版本的源码、默认规则与回归样本 |
-| `version/v0.3.3` | 当前 Rust 源码、独立网页、最佳十箱与反馈导出；Python 停止更新 |
+| `version/v0.3.3` | 独立网页、最佳十箱与反馈导出；有真实检测启动崩溃，建议使用 v0.3.4 |
+| `version/v0.3.4` | 当前 Rust：修复 OCR 运行时生命周期崩溃，新增真实启停回归 |
 
 根目录为当前 Rust 开发源码与冻结的 Python 归档；版本目录保留各自来源说明。`SOURCE_MANIFEST.json` 保存归档文件哈希，`.gitattributes` 保持源码快照字节不被行尾转换改变。运行历史、个人窗口设置、解释器、工具链缓存和构建产物不加入源码仓库。
