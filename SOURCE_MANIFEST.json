@@ -7,9 +7,24 @@
       "sha256": "53329a3ce3b81a3bcb1c083a46a8d47a09a459b457c8f2f5441fd13d9445d8b3"
     },
     {
+      "file": ".gitattributes",
+      "bytes": 78,
+      "sha256": "512ccbdfb74f97c93deb6c0f42844e821d6fc8feb36b65730b19ca8023814234"
+    },
+    {
       "file": ".gitignore",
       "bytes": 142,
       "sha256": "dd80eef8a299fdfc4c972b84324e159e045bb743f5f2ae72e7e322785048a622"
+    },
+    {
+      "file": "CHANGELOG.md",
+      "bytes": 690,
+      "sha256": "20f99bd325f489daed5b05e0577f6331ee1abadc8eaa0c3640708d7882985217"
+    },
+    {
+      "file": "README.md",
+      "bytes": 26585,
+      "sha256": "9cfa3e2adcbae9397c243e685bbbe0ec1d0f37adca0f3623901f17862da25834"
     },
     {
       "file": "capture.py",
@@ -17,19 +32,24 @@
       "sha256": "d85471d7ec0cd1dc5ec1a8e3560fae3a86f81607d2e5d35484dce4d2c1a485d2"
     },
     {
-      "file": "CHANGELOG.md",
-      "bytes": 450,
-      "sha256": "451268d40b467950d8ff3cf6f5fd120a8c60b23794d0653ca97e7d8f3a42b614"
+      "file": "detect.py",
+      "bytes": 44602,
+      "sha256": "a6fc3b5a864e5c8bed94a7a1248defd088c7bf76375df1334adefb25199e39d4"
     },
     {
-      "file": "detect.py",
-      "bytes": 44549,
-      "sha256": "a5addfb0976fc12e87439ff95532e3468b8ccfe9836e69433a5b2f4609d587a2"
+      "file": "docs/关键词屏蔽验证.md",
+      "bytes": 2211,
+      "sha256": "7ac3ebb5ce7e430e3a282a1b76339989dbddb319bd873c2fc1de397ecb51fc95"
     },
     {
       "file": "docs/早期开发说明.md",
       "bytes": 35520,
       "sha256": "fc9675c8b2ebda542ac07a2d7023e2bc4a150de6bfa44221a7e2aac1d4139a62"
+    },
+    {
+      "file": "docs/源码归档验证.md",
+      "bytes": 1023,
+      "sha256": "ddd1e3d0f0eecf20c2d5b0979dc4b76ded7e3fca6437ffd69740b6347efca4ae"
     },
     {
       "file": "docs/环境检测验证.md",
@@ -67,6 +87,21 @@
       "sha256": "011ba94e49018bbc1d1dd21f04bfa46f1c4c092650f263f1ba95df5d8d9b2666"
     },
     {
+      "file": "native/Cargo.lock",
+      "bytes": 19745,
+      "sha256": "01af2b44b89df2ca300c3e0376d2b372c3e0c52c75b4daebddb9af940d7ff48a"
+    },
+    {
+      "file": "native/Cargo.toml",
+      "bytes": 694,
+      "sha256": "3eae36fa87f228e9ff2e9d9739b9bc3e7cdf03bb461471497c1aded2ec078501"
+    },
+    {
+      "file": "native/README.md",
+      "bytes": 2657,
+      "sha256": "09feb4e64b39dc68fd9b5af565287e55bb9e4db80573784434db544c1a86bba4"
+    },
+    {
       "file": "native/assets/history.html",
       "bytes": 9246,
       "sha256": "8b5bd1e0fcd275ad7de558db4fcff1cb6cdafcd4c1318ec8b2531e82c4bee0a9"
@@ -82,29 +117,14 @@
       "sha256": "6e26e88d59a213bc4815a1b8393d074e5479d03da4bd80d850886467d27a316f"
     },
     {
-      "file": "native/Cargo.lock",
-      "bytes": 19745,
-      "sha256": "d0f78f652002803af83736afb168d2dc6e22b44563e8845aaf09fcb617da7667"
-    },
-    {
-      "file": "native/Cargo.toml",
-      "bytes": 694,
-      "sha256": "4a03e1be08162589a6d3d2dcdad2b5c7670461b1990deafa4cf9758decc56038"
-    },
-    {
-      "file": "native/README.md",
-      "bytes": 2149,
-      "sha256": "fc87d2ee44ab5c588c44be2270ded52c85d7708d5be8a20df5e5a897c3473884"
-    },
-    {
       "file": "native/src/capture.rs",
       "bytes": 5788,
       "sha256": "7a020d0720e86511a07b1bde1a34dd91280b7c31c383ca66f36de8ec3beb85a6"
     },
     {
       "file": "native/src/core.rs",
-      "bytes": 26485,
-      "sha256": "844524b357592b809ee333974b78fcab961df7dfa358e0b0db944c24276fb270"
+      "bytes": 26552,
+      "sha256": "11d6e6e71371b9da7f32486ac457621971f521fba6d9bcf5593b5835d6ad6fdf"
     },
     {
       "file": "native/src/environment.rs",
@@ -112,9 +132,14 @@
       "sha256": "6c422d89b2c8b34e3f7b866f9bb5ea01349b5374db9c5bd23c521e2f3f35a80c"
     },
     {
+      "file": "native/src/keyword_filter.rs",
+      "bytes": 3655,
+      "sha256": "3faf6ac06d009cd3ace46be4b79cc4263c4f214636de1b4b982846fb20eb7843"
+    },
+    {
       "file": "native/src/main.rs",
-      "bytes": 22023,
-      "sha256": "ddacee13cd704b4d62d701c33b5d397ab8254b3a044ea07070a8ee47c0bc6c13"
+      "bytes": 22581,
+      "sha256": "b13057648c7cbbd6312da7b15cd32440657fd3dccaff5be311dca8d1b01d2c1c"
     },
     {
       "file": "native/src/storage.rs",
@@ -127,9 +152,14 @@
       "sha256": "744719055150fd31280e0608c7631842b026af6bc2626e010e68c75dee8b35fe"
     },
     {
-      "file": "README.md",
-      "bytes": 24397,
-      "sha256": "44d42397045f8328d5fb6a2d9321f850a7faf07ae44c5d9d1d2d28c6a2890fda"
+      "file": "red_filter.json",
+      "bytes": 47,
+      "sha256": "bdcf79e27af4d14f56dde9e97ba02e1e761065f01ebba3f26a7ccc55dc996afe"
+    },
+    {
+      "file": "red_filter.py",
+      "bytes": 1004,
+      "sha256": "141e8eeefe18b9e9babeb3f1be7bfc9849345bcc4556bdb7fde4e0ce67c23315"
     },
     {
       "file": "requirements.txt",
@@ -143,8 +173,8 @@
     },
     {
       "file": "runner.py",
-      "bytes": 23299,
-      "sha256": "fabeb7547146fec8661779aee51ff291e634d313e03cc62a03f7c75fa541be6a"
+      "bytes": 23583,
+      "sha256": "add99bf8cd1c7531199417df0b5fa3e6bdceba524229c596e02acc6094d1a3f5"
     },
     {
       "file": "safebox.py",
@@ -272,6 +302,11 @@
       "sha256": "a473fe5c0717079ce93fdbf05e7f29485c0a9ce01fb470414db9296ad218a933"
     },
     {
+      "file": "tests/test_keyword_filter.py",
+      "bytes": 3614,
+      "sha256": "bf9b9ccae9ca8e18c65de98cf459d896a5135fc96957871d6969ce5ea26f1e39"
+    },
+    {
       "file": "tests/test_runner_lifecycle.py",
       "bytes": 939,
       "sha256": "ca93eff2aa6a2a852c6e6762e1a57d6e700ffe8dacaae255bf73937219a07e46"
@@ -298,13 +333,18 @@
     },
     {
       "file": "track.py",
-      "bytes": 27997,
-      "sha256": "7763f9fa2cf0aae5bab1a16de7d228a0fdb27f2ec3e6ce23305b1fad35729b35"
+      "bytes": 28164,
+      "sha256": "78668ee35a71ac5152dc0899192616726d32ccb9f28ce952bc43171d843da46a"
     },
     {
       "file": "version/v0.2.0/.gitignore",
       "bytes": 142,
       "sha256": "dd80eef8a299fdfc4c972b84324e159e045bb743f5f2ae72e7e322785048a622"
+    },
+    {
+      "file": "version/v0.2.0/README.md",
+      "bytes": 241,
+      "sha256": "1f623abc3364ba4cbf901a1bf310f336c170304183a5b30bfb337e76ee00a332"
     },
     {
       "file": "version/v0.2.0/capture.py",
@@ -335,11 +375,6 @@
       "file": "version/v0.2.0/ocr.py",
       "bytes": 4817,
       "sha256": "a2214a252cf4e7ef88b0d1f07a8d2eef8ac6f04fc17a5029daf19b4f8ca7b4ad"
-    },
-    {
-      "file": "version/v0.2.0/README.md",
-      "bytes": 241,
-      "sha256": "1f623abc3364ba4cbf901a1bf310f336c170304183a5b30bfb337e76ee00a332"
     },
     {
       "file": "version/v0.2.0/requirements.txt",
@@ -392,6 +427,11 @@
       "sha256": "dd80eef8a299fdfc4c972b84324e159e045bb743f5f2ae72e7e322785048a622"
     },
     {
+      "file": "version/v0.2.1/README.md",
+      "bytes": 250,
+      "sha256": "eccc574a2223d1511aafdb721205e31f8a0d6836501ea0dd51963d5ceba0aae3"
+    },
+    {
       "file": "version/v0.2.1/capture.py",
       "bytes": 10527,
       "sha256": "d85471d7ec0cd1dc5ec1a8e3560fae3a86f81607d2e5d35484dce4d2c1a485d2"
@@ -430,11 +470,6 @@
       "file": "version/v0.2.1/ocr.py",
       "bytes": 4693,
       "sha256": "744719055150fd31280e0608c7631842b026af6bc2626e010e68c75dee8b35fe"
-    },
-    {
-      "file": "version/v0.2.1/README.md",
-      "bytes": 250,
-      "sha256": "eccc574a2223d1511aafdb721205e31f8a0d6836501ea0dd51963d5ceba0aae3"
     },
     {
       "file": "version/v0.2.1/requirements.txt",
@@ -482,6 +517,116 @@
       "sha256": "ba4645e55ef8931c780ede7c156b8200d0c5c5b810db617f22120b6cf35b3458"
     },
     {
+      "file": "version/v0.2.2/.gitignore",
+      "bytes": 142,
+      "sha256": "dd80eef8a299fdfc4c972b84324e159e045bb743f5f2ae72e7e322785048a622"
+    },
+    {
+      "file": "version/v0.2.2/README.md",
+      "bytes": 207,
+      "sha256": "9240c09d02c5d7baeab8e87ffdb34d4af302731d8de12cd2314d35bc37519a76"
+    },
+    {
+      "file": "version/v0.2.2/capture.py",
+      "bytes": 10527,
+      "sha256": "d85471d7ec0cd1dc5ec1a8e3560fae3a86f81607d2e5d35484dce4d2c1a485d2"
+    },
+    {
+      "file": "version/v0.2.2/detect.py",
+      "bytes": 44602,
+      "sha256": "a6fc3b5a864e5c8bed94a7a1248defd088c7bf76375df1334adefb25199e39d4"
+    },
+    {
+      "file": "version/v0.2.2/environment.ps1",
+      "bytes": 2814,
+      "sha256": "2ee0e68ae309e5e2d80d4a437dc35f8f8f53674ae730315c4d682c3c3e7705c8"
+    },
+    {
+      "file": "version/v0.2.2/environment.py",
+      "bytes": 2774,
+      "sha256": "ac5665561b967cb97ee0014f136eb5ba5f3cb14f4fc674de31aaee1b3cae7646"
+    },
+    {
+      "file": "version/v0.2.2/history_ui.py",
+      "bytes": 9182,
+      "sha256": "72d9f24c01f1790c33346ed75e19186d8581923b9b8ec244255a77ff1a1e5299"
+    },
+    {
+      "file": "version/v0.2.2/imgio.py",
+      "bytes": 1337,
+      "sha256": "7b0fa32a19f605cfec9981567aeef52a113da8d7759f526c51cbf25f1c794f96"
+    },
+    {
+      "file": "version/v0.2.2/main.py",
+      "bytes": 41564,
+      "sha256": "011ba94e49018bbc1d1dd21f04bfa46f1c4c092650f263f1ba95df5d8d9b2666"
+    },
+    {
+      "file": "version/v0.2.2/ocr.py",
+      "bytes": 4693,
+      "sha256": "744719055150fd31280e0608c7631842b026af6bc2626e010e68c75dee8b35fe"
+    },
+    {
+      "file": "version/v0.2.2/red_filter.json",
+      "bytes": 47,
+      "sha256": "bdcf79e27af4d14f56dde9e97ba02e1e761065f01ebba3f26a7ccc55dc996afe"
+    },
+    {
+      "file": "version/v0.2.2/red_filter.py",
+      "bytes": 1004,
+      "sha256": "141e8eeefe18b9e9babeb3f1be7bfc9849345bcc4556bdb7fde4e0ce67c23315"
+    },
+    {
+      "file": "version/v0.2.2/requirements.txt",
+      "bytes": 328,
+      "sha256": "efa0d0beaed8b16bbffe2dc18a50a8cb8457cefa15d5341e9334217c118409be"
+    },
+    {
+      "file": "version/v0.2.2/roi.py",
+      "bytes": 3524,
+      "sha256": "5d7734328ca33b3f65595f8ec52e9df56a5b54898d411646fb80072ec018e7fe"
+    },
+    {
+      "file": "version/v0.2.2/runner.py",
+      "bytes": 23583,
+      "sha256": "add99bf8cd1c7531199417df0b5fa3e6bdceba524229c596e02acc6094d1a3f5"
+    },
+    {
+      "file": "version/v0.2.2/safebox.py",
+      "bytes": 7596,
+      "sha256": "e83071d685b4adaddf011e6ab133018e3e3c7d4b239d3875a324eee7c71af97e"
+    },
+    {
+      "file": "version/v0.2.2/settings.example.json",
+      "bytes": 46,
+      "sha256": "2151b07804cd47bf29adf0f35e39aa3609ad440e2ffc492966b5cdaf5fdc2eed"
+    },
+    {
+      "file": "version/v0.2.2/storage.py",
+      "bytes": 8507,
+      "sha256": "21e43b978af685fb2b05e7b63333de6c0efc8f2fe6d4f980fd05d31d453be769"
+    },
+    {
+      "file": "version/v0.2.2/tests/test_keyword_filter.py",
+      "bytes": 3614,
+      "sha256": "bf9b9ccae9ca8e18c65de98cf459d896a5135fc96957871d6969ce5ea26f1e39"
+    },
+    {
+      "file": "version/v0.2.2/track.py",
+      "bytes": 28164,
+      "sha256": "78668ee35a71ac5152dc0899192616726d32ccb9f28ce952bc43171d843da46a"
+    },
+    {
+      "file": "version/v0.2.2/webui.py",
+      "bytes": 30606,
+      "sha256": "7d39ceb8115c7b3aa58b865e95d980d0b976f9490db8fa64dfbe5d2c1e4eac56"
+    },
+    {
+      "file": "version/v0.2.2/启动源码.bat",
+      "bytes": 65,
+      "sha256": "ba4645e55ef8931c780ede7c156b8200d0c5c5b810db617f22120b6cf35b3458"
+    },
+    {
       "file": "version/v0.3.0/.cargo/config.toml",
       "bytes": 81,
       "sha256": "53329a3ce3b81a3bcb1c083a46a8d47a09a459b457c8f2f5441fd13d9445d8b3"
@@ -492,19 +637,9 @@
       "sha256": "dd80eef8a299fdfc4c972b84324e159e045bb743f5f2ae72e7e322785048a622"
     },
     {
-      "file": "version/v0.3.0/native/assets/history.html",
-      "bytes": 9246,
-      "sha256": "8b5bd1e0fcd275ad7de558db4fcff1cb6cdafcd4c1318ec8b2531e82c4bee0a9"
-    },
-    {
-      "file": "version/v0.3.0/native/assets/index.html",
-      "bytes": 15026,
-      "sha256": "098ae73aac214986f1c001a67f20651a946c2cb03bc250cabec3929291fc6285"
-    },
-    {
-      "file": "version/v0.3.0/native/build.ps1",
-      "bytes": 242,
-      "sha256": "6e26e88d59a213bc4815a1b8393d074e5479d03da4bd80d850886467d27a316f"
+      "file": "version/v0.3.0/README.md",
+      "bytes": 440,
+      "sha256": "7111cbf03b8e4a920c9b9d451f4dfea8969088a86572243cc6a0a8ef0cbdc133"
     },
     {
       "file": "version/v0.3.0/native/Cargo.lock",
@@ -520,6 +655,21 @@
       "file": "version/v0.3.0/native/README.md",
       "bytes": 319,
       "sha256": "66c5e82e063110d7a2ae0f39c4cf1c5b1c43b89a5e1c34dad9ccf899213bccea"
+    },
+    {
+      "file": "version/v0.3.0/native/assets/history.html",
+      "bytes": 9246,
+      "sha256": "8b5bd1e0fcd275ad7de558db4fcff1cb6cdafcd4c1318ec8b2531e82c4bee0a9"
+    },
+    {
+      "file": "version/v0.3.0/native/assets/index.html",
+      "bytes": 15026,
+      "sha256": "098ae73aac214986f1c001a67f20651a946c2cb03bc250cabec3929291fc6285"
+    },
+    {
+      "file": "version/v0.3.0/native/build.ps1",
+      "bytes": 242,
+      "sha256": "6e26e88d59a213bc4815a1b8393d074e5479d03da4bd80d850886467d27a316f"
     },
     {
       "file": "version/v0.3.0/native/src/capture.rs",
@@ -540,11 +690,6 @@
       "file": "version/v0.3.0/native/src/storage.rs",
       "bytes": 10575,
       "sha256": "9f4176de530439719913d696f559de9994efeea922f3da1763bba28586c1bdde"
-    },
-    {
-      "file": "version/v0.3.0/README.md",
-      "bytes": 440,
-      "sha256": "7111cbf03b8e4a920c9b9d451f4dfea8969088a86572243cc6a0a8ef0cbdc133"
     },
     {
       "file": "version/v0.3.0/tests/fixtures/brief_red_detail.png",
@@ -577,24 +722,14 @@
       "sha256": "dd80eef8a299fdfc4c972b84324e159e045bb743f5f2ae72e7e322785048a622"
     },
     {
+      "file": "version/v0.3.1/README.md",
+      "bytes": 145,
+      "sha256": "09476d805002ef007cd47f15535fd90cedd0d222759cd713f6fadb4483eb7c2e"
+    },
+    {
       "file": "version/v0.3.1/environment.ps1",
       "bytes": 2814,
       "sha256": "2ee0e68ae309e5e2d80d4a437dc35f8f8f53674ae730315c4d682c3c3e7705c8"
-    },
-    {
-      "file": "version/v0.3.1/native/assets/history.html",
-      "bytes": 9246,
-      "sha256": "8b5bd1e0fcd275ad7de558db4fcff1cb6cdafcd4c1318ec8b2531e82c4bee0a9"
-    },
-    {
-      "file": "version/v0.3.1/native/assets/index.html",
-      "bytes": 15681,
-      "sha256": "b2312b01c1cfda6b6e4bdb7cb9f0181dd531357197942f6d0287c99969e8db25"
-    },
-    {
-      "file": "version/v0.3.1/native/build.ps1",
-      "bytes": 242,
-      "sha256": "6e26e88d59a213bc4815a1b8393d074e5479d03da4bd80d850886467d27a316f"
     },
     {
       "file": "version/v0.3.1/native/Cargo.lock",
@@ -610,6 +745,21 @@
       "file": "version/v0.3.1/native/README.md",
       "bytes": 2149,
       "sha256": "fc87d2ee44ab5c588c44be2270ded52c85d7708d5be8a20df5e5a897c3473884"
+    },
+    {
+      "file": "version/v0.3.1/native/assets/history.html",
+      "bytes": 9246,
+      "sha256": "8b5bd1e0fcd275ad7de558db4fcff1cb6cdafcd4c1318ec8b2531e82c4bee0a9"
+    },
+    {
+      "file": "version/v0.3.1/native/assets/index.html",
+      "bytes": 15681,
+      "sha256": "b2312b01c1cfda6b6e4bdb7cb9f0181dd531357197942f6d0287c99969e8db25"
+    },
+    {
+      "file": "version/v0.3.1/native/build.ps1",
+      "bytes": 242,
+      "sha256": "6e26e88d59a213bc4815a1b8393d074e5479d03da4bd80d850886467d27a316f"
     },
     {
       "file": "version/v0.3.1/native/src/capture.rs",
@@ -637,11 +787,6 @@
       "sha256": "9f4176de530439719913d696f559de9994efeea922f3da1763bba28586c1bdde"
     },
     {
-      "file": "version/v0.3.1/README.md",
-      "bytes": 145,
-      "sha256": "09476d805002ef007cd47f15535fd90cedd0d222759cd713f6fadb4483eb7c2e"
-    },
-    {
       "file": "version/v0.3.1/tests/fixtures/brief_red_detail.png",
       "bytes": 186549,
       "sha256": "f5197826e0a59acf8b450ec3409a067a88bd845fd09fc8317ab27796b2e6d8df"
@@ -662,24 +807,119 @@
       "sha256": "ede3227f16b7fd56723ed4b2e743a3160ff7c70d0a2ae2421611147b868ade25"
     },
     {
+      "file": "version/v0.3.2/.cargo/config.toml",
+      "bytes": 81,
+      "sha256": "53329a3ce3b81a3bcb1c083a46a8d47a09a459b457c8f2f5441fd13d9445d8b3"
+    },
+    {
+      "file": "version/v0.3.2/.gitignore",
+      "bytes": 142,
+      "sha256": "dd80eef8a299fdfc4c972b84324e159e045bb743f5f2ae72e7e322785048a622"
+    },
+    {
+      "file": "version/v0.3.2/README.md",
+      "bytes": 207,
+      "sha256": "6652bafd10e3d99f87581e5a8025473477bf05faf2c41e7c301e7cb80ac5bcb6"
+    },
+    {
+      "file": "version/v0.3.2/environment.ps1",
+      "bytes": 2814,
+      "sha256": "2ee0e68ae309e5e2d80d4a437dc35f8f8f53674ae730315c4d682c3c3e7705c8"
+    },
+    {
+      "file": "version/v0.3.2/native/Cargo.lock",
+      "bytes": 19745,
+      "sha256": "01af2b44b89df2ca300c3e0376d2b372c3e0c52c75b4daebddb9af940d7ff48a"
+    },
+    {
+      "file": "version/v0.3.2/native/Cargo.toml",
+      "bytes": 694,
+      "sha256": "3eae36fa87f228e9ff2e9d9739b9bc3e7cdf03bb461471497c1aded2ec078501"
+    },
+    {
+      "file": "version/v0.3.2/native/README.md",
+      "bytes": 2657,
+      "sha256": "09feb4e64b39dc68fd9b5af565287e55bb9e4db80573784434db544c1a86bba4"
+    },
+    {
+      "file": "version/v0.3.2/native/assets/history.html",
+      "bytes": 9246,
+      "sha256": "8b5bd1e0fcd275ad7de558db4fcff1cb6cdafcd4c1318ec8b2531e82c4bee0a9"
+    },
+    {
+      "file": "version/v0.3.2/native/assets/index.html",
+      "bytes": 15681,
+      "sha256": "b2312b01c1cfda6b6e4bdb7cb9f0181dd531357197942f6d0287c99969e8db25"
+    },
+    {
+      "file": "version/v0.3.2/native/build.ps1",
+      "bytes": 242,
+      "sha256": "6e26e88d59a213bc4815a1b8393d074e5479d03da4bd80d850886467d27a316f"
+    },
+    {
+      "file": "version/v0.3.2/native/src/capture.rs",
+      "bytes": 5788,
+      "sha256": "7a020d0720e86511a07b1bde1a34dd91280b7c31c383ca66f36de8ec3beb85a6"
+    },
+    {
+      "file": "version/v0.3.2/native/src/core.rs",
+      "bytes": 26552,
+      "sha256": "11d6e6e71371b9da7f32486ac457621971f521fba6d9bcf5593b5835d6ad6fdf"
+    },
+    {
+      "file": "version/v0.3.2/native/src/environment.rs",
+      "bytes": 5684,
+      "sha256": "6c422d89b2c8b34e3f7b866f9bb5ea01349b5374db9c5bd23c521e2f3f35a80c"
+    },
+    {
+      "file": "version/v0.3.2/native/src/keyword_filter.rs",
+      "bytes": 3655,
+      "sha256": "3faf6ac06d009cd3ace46be4b79cc4263c4f214636de1b4b982846fb20eb7843"
+    },
+    {
+      "file": "version/v0.3.2/native/src/main.rs",
+      "bytes": 22581,
+      "sha256": "b13057648c7cbbd6312da7b15cd32440657fd3dccaff5be311dca8d1b01d2c1c"
+    },
+    {
+      "file": "version/v0.3.2/native/src/storage.rs",
+      "bytes": 10575,
+      "sha256": "9f4176de530439719913d696f559de9994efeea922f3da1763bba28586c1bdde"
+    },
+    {
+      "file": "version/v0.3.2/red_filter.json",
+      "bytes": 47,
+      "sha256": "bdcf79e27af4d14f56dde9e97ba02e1e761065f01ebba3f26a7ccc55dc996afe"
+    },
+    {
+      "file": "version/v0.3.2/tests/fixtures/brief_red_detail.png",
+      "bytes": 186549,
+      "sha256": "f5197826e0a59acf8b450ec3409a067a88bd845fd09fc8317ab27796b2e6d8df"
+    },
+    {
+      "file": "version/v0.3.2/tests/fixtures/brief_red_work.png",
+      "bytes": 628275,
+      "sha256": "5e8c158ad4270bd0f33a345744f393cb2a41cb4c5a19a57a239902f69132b4a8"
+    },
+    {
+      "file": "version/v0.3.2/tests/fixtures/run_red_0006.png",
+      "bytes": 259670,
+      "sha256": "0c5b782905bfd3dc2c8f9ce27c7cbb0d8c7c5826ead62d42825fffab5938f412"
+    },
+    {
+      "file": "version/v0.3.2/tests/fixtures/solar_false_positive.png",
+      "bytes": 201516,
+      "sha256": "ede3227f16b7fd56723ed4b2e743a3160ff7c70d0a2ae2421611147b868ade25"
+    },
+    {
       "file": "webui.py",
       "bytes": 30606,
-      "sha256": "ee548e9224e25d4400aeae321654c6c6afeaf4007ab8b335972bcd41fcdbf70b"
+      "sha256": "7d39ceb8115c7b3aa58b865e95d980d0b976f9490db8fa64dfbe5d2c1e4eac56"
     },
     {
       "file": "启动源码.bat",
       "bytes": 65,
       "sha256": "ba4645e55ef8931c780ede7c156b8200d0c5c5b810db617f22120b6cf35b3458"
-    },
-    {
-      "file": "docs/源码归档验证.md",
-      "bytes": 1023,
-      "sha256": "ddd1e3d0f0eecf20c2d5b0979dc4b76ded7e3fca6437ffd69740b6347efca4ae"
-    },
-    {
-      "file": ".gitattributes",
-      "bytes": 78,
-      "sha256": "512ccbdfb74f97c93deb6c0f42844e821d6fc8feb36b65730b19ca8023814234"
     }
   ]
 }
