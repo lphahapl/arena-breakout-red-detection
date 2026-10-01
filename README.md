@@ -2,10 +2,12 @@
 
 通过 Windows 屏幕截图识别暗区突围保险箱中的红色稀有度物品，自动记录每次检测运行、开箱会话、出红结果和截图，并提供网页历史记录与人工复核。
 
-当前最新正式版是 **Rust v0.3.2，Windows x64**。仓库同时保留 **Python v0.2.2** 和前一版本源码。实现采用 Windows OCR、图像颜色与几何规则、模板跟踪和多帧确认，识别过程在本机完成。
+当前最新正式版是 **Rust v0.3.3，Windows x64**。**Python v0.2.2 暂时标记废弃，停止更新；后续只维护 Rust。** 仓库保留 Python 和各历史版本源码用于归档。实现采用 Windows OCR、图像颜色与几何规则、模板跟踪和多帧确认，识别过程在本机完成。
 
 - [最新 Release](https://github.com/lphahapl/arena-breakout-red-detection/releases/latest)
-- [Rust v0.3.2 Windows x64 下载](https://github.com/lphahapl/arena-breakout-red-detection/releases/download/v0.3.2/arena-breakout-red-detection-v0.3.2-windows-x64.zip)
+- [Rust v0.3.3 Windows x64 下载](https://github.com/lphahapl/arena-breakout-red-detection/releases/download/v0.3.3/arena-breakout-red-detection-v0.3.3-windows-x64.zip)
+- [v0.3.3 验证报告](docs/v0.3.3验证.md)
+- [Python 废弃说明](PYTHON_DEPRECATED.md)
 - [检测验证报告](docs/验证报告.md)
 - [OCR 环境准备验证](docs/环境检测验证.md)
 - [源码归档与版本来源](docs/源码归档验证.md)
@@ -16,9 +18,9 @@
 
 1. 下载分享包并解压，双击 `暗区红品检测.exe`。
 2. 浏览器自动打开本机控制页面；等待中文 OCR 环境检测完成。
-3. 选择游戏窗口，点击“预览”，确认工作区覆盖的是右侧被搜索的保险箱。
+3. 选择游戏窗口，点击“查看预览”，确认工作区覆盖的是右侧被搜索的保险箱。
 4. 点击“开始检测”，让保险箱搜索面板保持可见，并等待游戏搜索完成后再关闭面板。
-5. 点击“停止”结束本次检测；“运行历史”可查看每次运行、截图和人工复核。
+5. 点击“停止记录”结束本次检测；“运行历史”可查看每次运行、截图和人工复核。
 6. Rust 版的“退出程序”会结束检测并退出后台进程；单独关闭网页会保留后台程序。
 
 发布程序无需 Python、Rust、OpenCV 或 Visual C++ 运行库。首次运行如果缺少系统简体中文 OCR，会发起系统组件安装，需要联网并允许 Windows 管理员授权；系统也可能要求重启。
@@ -40,7 +42,9 @@
 
 程序识别的是屏幕上可见的界面。选中播放游戏录像的浏览器时，也会把录像中的保险箱当作输入；它不会验证当前输入是否来自真实游戏进程。
 
-## 2. 两种实现是怎么写的
+## 2. 当前 Rust 与归档 Python 是怎么写的
+
+下表保留历史实现对照。当前功能在 Rust 开发；Python 源码、页面和 v0.2.x 发行版均已冻结。
 
 | 层 | Python 实现 | Rust 实现 |
 | --- | --- | --- |
@@ -53,7 +57,7 @@
 | 持久化 | `storage.py`：Python `sqlite3` | `storage.rs`：`rusqlite`，SQLite 编译进程序 |
 | 环境准备 | `environment.py` 执行共享 `environment.ps1` | `environment.rs` 执行内嵌的同一份 PowerShell 安装逻辑 |
 
-Rust 版内嵌网页、数据库依赖和图片编码，发布时只需 exe 与使用说明；`.cargo/config.toml` 配置静态 CRT。Python 便携版内置解释器和调用库；运行仓库源码时需自行安装 `requirements.txt`。
+Rust 版内嵌网页、数据库依赖和图片编码，发布时只需 exe、默认规则 JSON 与使用说明；`.cargo/config.toml` 配置静态 CRT。Python 便携版内置解释器和调用库；运行仓库源码时需自行安装 `requirements.txt`。
 
 两版遵循相同的业务规则，但图像计算实现有差异。Python 使用 OpenCV；Rust 的模板相关性使用局部采样，连通域与形态学也由自身实现，不能假定所有边界像素或分数逐位相同。两版都需要真实截图和视频样本回归。
 
@@ -229,6 +233,41 @@ PNG 留在文件系统，数据库保存事件和截图文件名。截图采用�
 
 当前没有自动根据复核标签训练模型或改变阈值。人工复核用于整理证据和后续规则回归。
 
+### 个人最高爆率：连续十箱
+
+在所有历史运行里，分别按事件序号寻找同一次运行内连续十个完整结算保险箱，取出红率最高的一组。实现使用 `native/src/stats.rs` 的滑动窗口。
+
+- 只统计 `red` 和 `clean`；`start` 只是开箱事件，不占箱数。
+- 运行切换或 `incomplete` 会打断连续段，不能跳过未完成箱凑十个。
+- 每组必须恰好十箱，出红率 = 出红箱数 / 10 × 100%；并列取较新的窗口。
+- 不足十箱时显示尚未生成成绩，并展示最长连续结算进度。
+- 成绩使用原始自动检测结果；人工复核独立保留。因此已标记的误报仍属于原始自动成绩，页面明确显示“按自动检测统计”。
+- 控制页和历史页显示最高成绩与十个结果格；“查看这十箱”跳转并筛选对应十条结算记录，金色边框标识最佳窗口。
+
+此统计在历史读取时执行，实时页约每十秒更新，不加入每帧图像检测流程；重启后从已持久化事件重新计算，无需额外成绩数据库。
+
+### 一键导出反馈日志
+
+在历史页选择发生问题的运行，再点击“导出反馈日志”。浏览器下载 ZIP，本机 `exports/` 同时保留原文件。实时页导出当前运行；未开始时选最新历史，没有历史也能导出环境诊断。程序不自动上传，使用者可以附上时间、预期与实际表现转发反馈包。
+
+| ZIP 内容 | 作用 |
+| --- | --- |
+| `diagnostics.json` | 版本、导出时间、平台架构、当前运行状态、OCR 环境和当前配置 |
+| `run.json` | 所选运行的数据库一致快照，包含元数据、当次配置、事件和独立复核 |
+| `run/events.jsonl`、`run/trace.jsonl` | 原始事件与逐次采样状态/耗时，存在时保留 |
+| `run/*.png` | 所选事件引用的原图与标注证据，去重保留 |
+| `personal_stats.json` | 自动统计的个人最佳十箱及汇总 |
+| `missing_files.json` | 缺失原始日志或截图的名称 |
+| `反馈说明.txt` | 反馈信息与快照边界说明 |
+
+只复制所选运行的证据，不打包整个个人 SQLite 或其他运行的截图与日志。包中包含该运行的窗口标题、截图和路径等诊断信息，分享前可以检查内容。历史缺失元数据不会补造。运行中导出的 `run.json` 保持一致，原始日志可能继续追加或带不完整末行；排查时以快照和时间对照。
+
+ZIP 使用快速 Deflate 压缩文本、直接存储 PNG，64 KiB 分块读取，成功后将 `.zip.part` 改名；失败不留下看似完整的 ZIP。同一时间只导出一个包。采用 ZIP32，超过格式大小限制会明确报错。`exports/` 和历史目录均被 Git 忽略。
+
+### Rust 网页界面
+
+v0.3.3 的 HTML、CSS 和原生 JavaScript 都来自 `native/assets/`，编译时嵌入 exe，没有外部字体、脚本或网络图片依赖。实时页突出 OCR 环境、窗口选择、检测状态和本次指标；历史页提供运行列表、结算筛选、最佳十箱筛选、截图放大与复核。页面进入/跳转、按钮反馈和截图弹窗有轻量过渡；系统要求减少动画时自动关闭。窄窗口布局会改为单列。
+
 ## 7. OCR 环境准备的行为
 
 网页与环境准备在不同线程运行。环境状态为 `checking`、`installing`、`ready` 或 `error`；准备完成之前，网页和后端均阻止开始检测。
@@ -292,7 +331,7 @@ Python 便携版文件在 `app/`，Python 源码在根目录；Rust 在 exe 同�
 
 词语使用 OCR 文本的子串匹配，不是正则或稀有度白名单。“航天实验室”包含“实验室”而被屏蔽；“航天导航仪”不会因“航天”被排除，仍需通过颜色、几何及多帧判据。OCR 如果少读“室”，识别为“航天实验”，默认词将无法命中；不要为此重新加回“航天”，否则会误杀航天导航仪。后续应根据带截图的实际误报再调整精确词语。
 
-### Python 源码
+### Python 源码（废弃归档，不再更新）
 
 需要 Windows 10/11 x64 和 Python 3.13。仓库锁定的调用库版本见 `requirements.txt`。
 
@@ -324,13 +363,7 @@ cargo build --release --locked --manifest-path native/Cargo.toml
 native/target/release/ab-red-detect.exe --data-dir test-data --port 17945 --no-browser
 ```
 
-网页源文件由 Python 页面字符串生成，修改 `webui.py` 或 `history_ui.py` 后运行：
-
-```powershell
-python tools/export_assets.py
-```
-
-再重新构建 Rust，更新 `native/assets/` 中被编译进 exe 的 HTML。
+网页源文件在 `native/assets/`：`index.html`、`history.html`、`app.css`、`app.js`。直接修改后重新构建 Rust，即可更新嵌入网页。旧 `tools/export_assets.py` 已退役，会提示迁移而不会覆盖 Rust 资源；不再修改 Python 页面来生成界面。
 
 ### 代码入口
 
@@ -344,6 +377,8 @@ python tools/export_assets.py
 | `storage.py` / `native/src/storage.rs` | SQLite、旧记录导入、统计和复核 |
 | `environment.py` / `native/src/environment.rs` / `environment.ps1` | OCR 检查、安装状态和重试 |
 | `webui.py` / `history_ui.py` / `native/assets/` | 控制页与历史页 |
+| `native/src/stats.rs` | 连续十箱成绩与窗口边界 |
+| `native/src/feedback.rs` | 单次运行反馈快照与流式 ZIP 导出 |
 | `tests/fixtures/` | 真实面板与颜色/形状回归样本 |
 
 ### 主要本机 HTTP 接口
@@ -359,9 +394,25 @@ python tools/export_assets.py
 | `GET /api/history`、`GET /api/run`、`GET /api/events` | 历史分页、运行详情和事件 |
 | `GET /shot/<run>/<file>` | 证据截图 |
 | `POST /api/review` | 独立保存人工复核标签 |
+| `GET /api/stats` | 历史内最佳连续十箱、总完整结算与最长连续段 |
+| `POST /api/export?run=<id>` | 生成反馈 ZIP，返回文件名与下载地址 |
+| `GET /api/export?run=<id>` | 直接生成并下载反馈 ZIP |
+| `GET /feedback/<filename>` | 下载已生成的反馈文件 |
 | `POST /api/quit` | Rust 版保存收尾并退出后台程序 |
 
 ## 10. 测试与验证边界
+
+当前 Rust 验证：
+
+```powershell
+cargo test --locked --manifest-path native/Cargo.toml
+cargo build --release --locked --manifest-path native/Cargo.toml
+python tests/native_features_qa.py
+```
+
+`native_features_qa.py` 只使用 Python 标准库作为开发测试工具；发布程序不需要 Python。它启动实际 exe，检查十箱统计边界、人工复核独立性、重启保留、ZIP 压缩与 CRC、证据内容、无历史导出和路径校验。
+
+归档检测回归与历史测试命令：
 
 ```powershell
 python -m unittest discover -s tests -p "test_*.py"
@@ -373,13 +424,15 @@ python tests/native_qa.py
 
 当前验证包括：
 
-- 30 项 Python 单元 / HTTP / 环境流程测试和 11 项当前 Rust 测试。新增 JSON 校验、词表修改、每次开始重读、航天导航仪放行与实验室屏蔽的回归。
+- 当前 Rust 14 项单元测试、原生 HTTP/历史回归与新增反馈/成绩端到端验证；八张既有真实截图回归通过。
+- v0.3.3 实际网页跳转、筛选、放大、下载以及窄屏布局检查通过；分享包干净解压启动验证见新报告。
+- 归档 Python v0.2.2 的 30 项单元 / HTTP / 环境流程测试（前次验证）与 Rust v0.3.2 的 11 项测试。新增 JSON 校验、词表修改、每次开始重读、航天导航仪放行与实验室屏蔽的回归。
 - 太阳能充电器误报、真实花瓶、短暂高亮月壤样本、多帧位置一致性和面板消失回归。
 - 历史持久化、旧记录导入、损坏 JSONL、复核重启保留、窗口不存在及端口冲突。
 - 已发布两版分享包的干净解压启动与本机真实中文 OCR 可用性。
 - v0.2.0 / v0.3.0 的四段视频正常倍速验收，共 11 次开箱、6 次出红，与独立人工期望逐次一致。
 
-视频验收属于前一检测版本；v0.2.1 / v0.3.1 增加环境准备，并没有重新宣称对四段视频完整播放。v0.2.2 / v0.3.2 已回归真实截图与干净分享包，但没有重新完整播放四段视频，也没有航天导航仪新截图；相关物品名称通过文字筛选测试验证。现有样本通过也不等于总体准确率达到 100%，尚未覆盖所有分辨率、UI 比例、背景、物品和完整操作方式。
+v0.3.3 未调整图像检测判据，没有重新完整播放四段视频，也没有第二台 PC 验收。视频验收属于前一检测版本；v0.2.1 / v0.3.1 增加环境准备，并没有重新宣称对四段视频完整播放。v0.2.2 / v0.3.2 已回归真实截图与干净分享包，但没有重新完整播放四段视频，也没有航天导航仪新截图；相关物品名称通过文字筛选测试验证。现有样本通过也不等于总体准确率达到 100%，尚未覆盖所有分辨率、UI 比例、背景、物品和完整操作方式。
 
 排查误报或漏报时，保留对应 PNG、`events.jsonl` 与 `trace.jsonl`：先确认窗口与工作区，再看是否建立会话、模板是否健康，最后检查候选拒绝原因、多帧票数及 OCR 排除文字。调整规则后，应同时回归真实红品与已知非红样本。
 
@@ -392,6 +445,7 @@ python tests/native_qa.py
 | `version/v0.3.0` | 从 v0.3.1 移除环境补丁并恢复旧网页的行为恢复源码，不能称为旧二进制的精确原始源码快照 |
 | `version/v0.3.1` | Rust 原生版源码快照，增加环境准备 |
 | `version/v0.2.2` | Python 源码快照，增加 JSON 屏蔽词与每次开始重读 |
-| `version/v0.3.2` | 当前 Rust 源码、默认规则 JSON、嵌入网页与回归样本 |
+| `version/v0.3.2` | Rust JSON 词表版本的源码、默认规则与回归样本 |
+| `version/v0.3.3` | 当前 Rust 源码、独立网页、最佳十箱与反馈导出；Python 停止更新 |
 
-根目录是当前双实现开发源码；版本目录保留各自来源说明。`SOURCE_MANIFEST.json` 保存归档文件哈希，`.gitattributes` 保持源码快照字节不被行尾转换改变。运行历史、个人窗口设置、解释器、工具链缓存和构建产物不加入源码仓库。
+根目录为当前 Rust 开发源码与冻结的 Python 归档；版本目录保留各自来源说明。`SOURCE_MANIFEST.json` 保存归档文件哈希，`.gitattributes` 保持源码快照字节不被行尾转换改变。运行历史、个人窗口设置、解释器、工具链缓存和构建产物不加入源码仓库。
