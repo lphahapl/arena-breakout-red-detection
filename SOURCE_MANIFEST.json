@@ -1,0 +1,680 @@
+{
+  "created": "2026-10-01",
+  "files": [
+    {
+      "file": ".cargo/config.toml",
+      "bytes": 81,
+      "sha256": "53329a3ce3b81a3bcb1c083a46a8d47a09a459b457c8f2f5441fd13d9445d8b3"
+    },
+    {
+      "file": ".gitignore",
+      "bytes": 142,
+      "sha256": "dd80eef8a299fdfc4c972b84324e159e045bb743f5f2ae72e7e322785048a622"
+    },
+    {
+      "file": "capture.py",
+      "bytes": 10527,
+      "sha256": "d85471d7ec0cd1dc5ec1a8e3560fae3a86f81607d2e5d35484dce4d2c1a485d2"
+    },
+    {
+      "file": "CHANGELOG.md",
+      "bytes": 450,
+      "sha256": "451268d40b467950d8ff3cf6f5fd120a8c60b23794d0653ca97e7d8f3a42b614"
+    },
+    {
+      "file": "detect.py",
+      "bytes": 44549,
+      "sha256": "a5addfb0976fc12e87439ff95532e3468b8ccfe9836e69433a5b2f4609d587a2"
+    },
+    {
+      "file": "docs/早期开发说明.md",
+      "bytes": 35520,
+      "sha256": "fc9675c8b2ebda542ac07a2d7023e2bc4a150de6bfa44221a7e2aac1d4139a62"
+    },
+    {
+      "file": "docs/环境检测验证.md",
+      "bytes": 2120,
+      "sha256": "42d669f3741bf355d2168f71e301bb40200931662158d4d488c079e537df5481"
+    },
+    {
+      "file": "docs/验证报告.md",
+      "bytes": 6171,
+      "sha256": "b82750dffc1c6799a17a29643d3ffc05bb2c922aa1835b6b84b4b463492cc66e"
+    },
+    {
+      "file": "environment.ps1",
+      "bytes": 2814,
+      "sha256": "2ee0e68ae309e5e2d80d4a437dc35f8f8f53674ae730315c4d682c3c3e7705c8"
+    },
+    {
+      "file": "environment.py",
+      "bytes": 2774,
+      "sha256": "ac5665561b967cb97ee0014f136eb5ba5f3cb14f4fc674de31aaee1b3cae7646"
+    },
+    {
+      "file": "history_ui.py",
+      "bytes": 9182,
+      "sha256": "72d9f24c01f1790c33346ed75e19186d8581923b9b8ec244255a77ff1a1e5299"
+    },
+    {
+      "file": "imgio.py",
+      "bytes": 1337,
+      "sha256": "7b0fa32a19f605cfec9981567aeef52a113da8d7759f526c51cbf25f1c794f96"
+    },
+    {
+      "file": "main.py",
+      "bytes": 41564,
+      "sha256": "011ba94e49018bbc1d1dd21f04bfa46f1c4c092650f263f1ba95df5d8d9b2666"
+    },
+    {
+      "file": "native/assets/history.html",
+      "bytes": 9246,
+      "sha256": "8b5bd1e0fcd275ad7de558db4fcff1cb6cdafcd4c1318ec8b2531e82c4bee0a9"
+    },
+    {
+      "file": "native/assets/index.html",
+      "bytes": 15681,
+      "sha256": "b2312b01c1cfda6b6e4bdb7cb9f0181dd531357197942f6d0287c99969e8db25"
+    },
+    {
+      "file": "native/build.ps1",
+      "bytes": 242,
+      "sha256": "6e26e88d59a213bc4815a1b8393d074e5479d03da4bd80d850886467d27a316f"
+    },
+    {
+      "file": "native/Cargo.lock",
+      "bytes": 19745,
+      "sha256": "d0f78f652002803af83736afb168d2dc6e22b44563e8845aaf09fcb617da7667"
+    },
+    {
+      "file": "native/Cargo.toml",
+      "bytes": 694,
+      "sha256": "4a03e1be08162589a6d3d2dcdad2b5c7670461b1990deafa4cf9758decc56038"
+    },
+    {
+      "file": "native/README.md",
+      "bytes": 2149,
+      "sha256": "fc87d2ee44ab5c588c44be2270ded52c85d7708d5be8a20df5e5a897c3473884"
+    },
+    {
+      "file": "native/src/capture.rs",
+      "bytes": 5788,
+      "sha256": "7a020d0720e86511a07b1bde1a34dd91280b7c31c383ca66f36de8ec3beb85a6"
+    },
+    {
+      "file": "native/src/core.rs",
+      "bytes": 26485,
+      "sha256": "844524b357592b809ee333974b78fcab961df7dfa358e0b0db944c24276fb270"
+    },
+    {
+      "file": "native/src/environment.rs",
+      "bytes": 5684,
+      "sha256": "6c422d89b2c8b34e3f7b866f9bb5ea01349b5374db9c5bd23c521e2f3f35a80c"
+    },
+    {
+      "file": "native/src/main.rs",
+      "bytes": 22023,
+      "sha256": "ddacee13cd704b4d62d701c33b5d397ab8254b3a044ea07070a8ee47c0bc6c13"
+    },
+    {
+      "file": "native/src/storage.rs",
+      "bytes": 10575,
+      "sha256": "9f4176de530439719913d696f559de9994efeea922f3da1763bba28586c1bdde"
+    },
+    {
+      "file": "ocr.py",
+      "bytes": 4693,
+      "sha256": "744719055150fd31280e0608c7631842b026af6bc2626e010e68c75dee8b35fe"
+    },
+    {
+      "file": "README.md",
+      "bytes": 2309,
+      "sha256": "eeb96da404bcee7bffead99efbd293d187612cf0b77210117303de2256acb205"
+    },
+    {
+      "file": "requirements.txt",
+      "bytes": 328,
+      "sha256": "efa0d0beaed8b16bbffe2dc18a50a8cb8457cefa15d5341e9334217c118409be"
+    },
+    {
+      "file": "roi.py",
+      "bytes": 3524,
+      "sha256": "5d7734328ca33b3f65595f8ec52e9df56a5b54898d411646fb80072ec018e7fe"
+    },
+    {
+      "file": "runner.py",
+      "bytes": 23299,
+      "sha256": "fabeb7547146fec8661779aee51ff291e634d313e03cc62a03f7c75fa541be6a"
+    },
+    {
+      "file": "safebox.py",
+      "bytes": 7596,
+      "sha256": "e83071d685b4adaddf011e6ab133018e3e3c7d4b239d3875a324eee7c71af97e"
+    },
+    {
+      "file": "sample_label.png",
+      "bytes": 14626,
+      "sha256": "16f835ac98e31fcb5053e25add47814bb5af0f1485853605819f30818fa621e7"
+    },
+    {
+      "file": "sample_wood.png",
+      "bytes": 17410,
+      "sha256": "e9768326f0f1745d4f708c66b9d373267a5e6544993b53463b329cfd2bf7bc97"
+    },
+    {
+      "file": "settings.example.json",
+      "bytes": 46,
+      "sha256": "2151b07804cd47bf29adf0f35e39aa3609ad440e2ffc492966b5cdaf5fdc2eed"
+    },
+    {
+      "file": "storage.py",
+      "bytes": 8507,
+      "sha256": "21e43b978af685fb2b05e7b63333de6c0efc8f2fe6d4f980fd05d31d453be769"
+    },
+    {
+      "file": "test_ocr.py",
+      "bytes": 7774,
+      "sha256": "400636910b3285c521e38e9401362a5da9bc2d2b5ab6bd0cb954651894e6ed83"
+    },
+    {
+      "file": "test_real.py",
+      "bytes": 15911,
+      "sha256": "4b44944c57d6cea95cf4ad8007baced051386d56205ab0335896733ac9a8f4a5"
+    },
+    {
+      "file": "test_runner.py",
+      "bytes": 17323,
+      "sha256": "dbb33c4e87915dc9f66031ecc59946f7aae0f6fcac51ca1bce5674698a493979"
+    },
+    {
+      "file": "test_track.py",
+      "bytes": 13777,
+      "sha256": "1379cd6587f5a268ca168191093cedfe26aa46f226611dabea3bf9fc44bb32db"
+    },
+    {
+      "file": "tests/fixtures/brief_red_detail.png",
+      "bytes": 186549,
+      "sha256": "f5197826e0a59acf8b450ec3409a067a88bd845fd09fc8317ab27796b2e6d8df"
+    },
+    {
+      "file": "tests/fixtures/brief_red_work.png",
+      "bytes": 628275,
+      "sha256": "5e8c158ad4270bd0f33a345744f393cb2a41cb4c5a19a57a239902f69132b4a8"
+    },
+    {
+      "file": "tests/fixtures/real/name_20260926_031955_frame.png",
+      "bytes": 1763491,
+      "sha256": "85675984f4098bb924cc52b24441071ebea1df28440bd4f9ab301d67c221cddf"
+    },
+    {
+      "file": "tests/fixtures/real/sample2_frame.png",
+      "bytes": 1869209,
+      "sha256": "a00169422586fd2418e8404901c9e1588e993f649d24443b18c177a53242222a"
+    },
+    {
+      "file": "tests/fixtures/real/sample3_frame.png",
+      "bytes": 1923061,
+      "sha256": "73cbe9f7c97549804e1ba5fd222bbd8eac6f4b217063bf81c009ab40316d4f95"
+    },
+    {
+      "file": "tests/fixtures/real/sample4_frame.png",
+      "bytes": 1452444,
+      "sha256": "4782e57714e9cc803461bdd64afa7a766cf517b3dc3e1c443f703615f76c56db"
+    },
+    {
+      "file": "tests/fixtures/real/sample5_frame.png",
+      "bytes": 1990570,
+      "sha256": "f49d57506431dc50e8585d503554a43b8dbbc900bfb78bb4d8e6028a74c6bfa2"
+    },
+    {
+      "file": "tests/fixtures/real/sample6_frame.png",
+      "bytes": 2993582,
+      "sha256": "435740d15cc5ca26b796ecb8ff0d38b1d422b248656a28a80cff7e93b3f7c313"
+    },
+    {
+      "file": "tests/fixtures/real/sample7_frame.png",
+      "bytes": 2041194,
+      "sha256": "fe92b1f01d55fed95dea1d570aa77d07d7f566f07c914669bdcc737034e97978"
+    },
+    {
+      "file": "tests/fixtures/real/sample8_frame.png",
+      "bytes": 2179103,
+      "sha256": "0ae92fa897b410e3266d319c279fc19b90837d0d8fe4d96577bf93d0d7a828fa"
+    },
+    {
+      "file": "tests/fixtures/run_red_0006.png",
+      "bytes": 259670,
+      "sha256": "0c5b782905bfd3dc2c8f9ce27c7cbb0d8c7c5826ead62d42825fffab5938f412"
+    },
+    {
+      "file": "tests/fixtures/solar_false_positive.png",
+      "bytes": 201516,
+      "sha256": "ede3227f16b7fd56723ed4b2e743a3160ff7c70d0a2ae2421611147b868ade25"
+    },
+    {
+      "file": "tests/native_qa.py",
+      "bytes": 3343,
+      "sha256": "10731245f0540022100e4e83ec2b497a39136d9919adb9b1ccda0355aa68d39b"
+    },
+    {
+      "file": "tests/test_accuracy.py",
+      "bytes": 4334,
+      "sha256": "f4eac3c26704e655d21aaf453bbead47093874bf3d853356b22838f2cf3f9013"
+    },
+    {
+      "file": "tests/test_environment.py",
+      "bytes": 3905,
+      "sha256": "be026aca4f11304d0845888c621bf0df6f020d641e01b2fb9780d81306d840a2"
+    },
+    {
+      "file": "tests/test_environment_powershell.py",
+      "bytes": 4142,
+      "sha256": "a473fe5c0717079ce93fdbf05e7f29485c0a9ce01fb470414db9296ad218a933"
+    },
+    {
+      "file": "tests/test_runner_lifecycle.py",
+      "bytes": 939,
+      "sha256": "ca93eff2aa6a2a852c6e6762e1a57d6e700ffe8dacaae255bf73937219a07e46"
+    },
+    {
+      "file": "tests/test_storage.py",
+      "bytes": 2785,
+      "sha256": "ec03db1747e6cdb423d783ca8246ede42859012e3ee4b4e0f1ab98cff8c96a20"
+    },
+    {
+      "file": "tests/test_webui.py",
+      "bytes": 3324,
+      "sha256": "faed6220dcdc2a8e9f09cf05e4872d5ac21065c3b2d2507114155bc641f67d1c"
+    },
+    {
+      "file": "tests/video_expected.json",
+      "bytes": 1538,
+      "sha256": "7758a68fca5f82d23e56e14f5b692717ce4bbd2210c658e7b330947abbf81857"
+    },
+    {
+      "file": "tools/export_assets.py",
+      "bytes": 607,
+      "sha256": "e7c10d4a01de3a9858a520c574a29a27e105da1d38a710d51b7c1528a5d753ec"
+    },
+    {
+      "file": "track.py",
+      "bytes": 27997,
+      "sha256": "7763f9fa2cf0aae5bab1a16de7d228a0fdb27f2ec3e6ce23305b1fad35729b35"
+    },
+    {
+      "file": "version/v0.2.0/.gitignore",
+      "bytes": 142,
+      "sha256": "dd80eef8a299fdfc4c972b84324e159e045bb743f5f2ae72e7e322785048a622"
+    },
+    {
+      "file": "version/v0.2.0/capture.py",
+      "bytes": 10527,
+      "sha256": "d85471d7ec0cd1dc5ec1a8e3560fae3a86f81607d2e5d35484dce4d2c1a485d2"
+    },
+    {
+      "file": "version/v0.2.0/detect.py",
+      "bytes": 44549,
+      "sha256": "a5addfb0976fc12e87439ff95532e3468b8ccfe9836e69433a5b2f4609d587a2"
+    },
+    {
+      "file": "version/v0.2.0/history_ui.py",
+      "bytes": 9182,
+      "sha256": "72d9f24c01f1790c33346ed75e19186d8581923b9b8ec244255a77ff1a1e5299"
+    },
+    {
+      "file": "version/v0.2.0/imgio.py",
+      "bytes": 1337,
+      "sha256": "7b0fa32a19f605cfec9981567aeef52a113da8d7759f526c51cbf25f1c794f96"
+    },
+    {
+      "file": "version/v0.2.0/main.py",
+      "bytes": 41564,
+      "sha256": "011ba94e49018bbc1d1dd21f04bfa46f1c4c092650f263f1ba95df5d8d9b2666"
+    },
+    {
+      "file": "version/v0.2.0/ocr.py",
+      "bytes": 4817,
+      "sha256": "a2214a252cf4e7ef88b0d1f07a8d2eef8ac6f04fc17a5029daf19b4f8ca7b4ad"
+    },
+    {
+      "file": "version/v0.2.0/README.md",
+      "bytes": 241,
+      "sha256": "1f623abc3364ba4cbf901a1bf310f336c170304183a5b30bfb337e76ee00a332"
+    },
+    {
+      "file": "version/v0.2.0/requirements.txt",
+      "bytes": 328,
+      "sha256": "efa0d0beaed8b16bbffe2dc18a50a8cb8457cefa15d5341e9334217c118409be"
+    },
+    {
+      "file": "version/v0.2.0/roi.py",
+      "bytes": 3524,
+      "sha256": "5d7734328ca33b3f65595f8ec52e9df56a5b54898d411646fb80072ec018e7fe"
+    },
+    {
+      "file": "version/v0.2.0/runner.py",
+      "bytes": 23051,
+      "sha256": "c52e5ec6a2b46be772a4a13ca045eb8629712dc4e0d662541aeb903d3efdf963"
+    },
+    {
+      "file": "version/v0.2.0/safebox.py",
+      "bytes": 7596,
+      "sha256": "e83071d685b4adaddf011e6ab133018e3e3c7d4b239d3875a324eee7c71af97e"
+    },
+    {
+      "file": "version/v0.2.0/settings.example.json",
+      "bytes": 46,
+      "sha256": "2151b07804cd47bf29adf0f35e39aa3609ad440e2ffc492966b5cdaf5fdc2eed"
+    },
+    {
+      "file": "version/v0.2.0/storage.py",
+      "bytes": 8507,
+      "sha256": "21e43b978af685fb2b05e7b63333de6c0efc8f2fe6d4f980fd05d31d453be769"
+    },
+    {
+      "file": "version/v0.2.0/track.py",
+      "bytes": 27997,
+      "sha256": "7763f9fa2cf0aae5bab1a16de7d228a0fdb27f2ec3e6ce23305b1fad35729b35"
+    },
+    {
+      "file": "version/v0.2.0/webui.py",
+      "bytes": 29423,
+      "sha256": "92a53246171920c276d52f15993d9995b0a469035aa7942f36590efde6dc11cf"
+    },
+    {
+      "file": "version/v0.2.0/启动源码.bat",
+      "bytes": 65,
+      "sha256": "ba4645e55ef8931c780ede7c156b8200d0c5c5b810db617f22120b6cf35b3458"
+    },
+    {
+      "file": "version/v0.2.1/.gitignore",
+      "bytes": 142,
+      "sha256": "dd80eef8a299fdfc4c972b84324e159e045bb743f5f2ae72e7e322785048a622"
+    },
+    {
+      "file": "version/v0.2.1/capture.py",
+      "bytes": 10527,
+      "sha256": "d85471d7ec0cd1dc5ec1a8e3560fae3a86f81607d2e5d35484dce4d2c1a485d2"
+    },
+    {
+      "file": "version/v0.2.1/detect.py",
+      "bytes": 44549,
+      "sha256": "a5addfb0976fc12e87439ff95532e3468b8ccfe9836e69433a5b2f4609d587a2"
+    },
+    {
+      "file": "version/v0.2.1/environment.ps1",
+      "bytes": 2814,
+      "sha256": "2ee0e68ae309e5e2d80d4a437dc35f8f8f53674ae730315c4d682c3c3e7705c8"
+    },
+    {
+      "file": "version/v0.2.1/environment.py",
+      "bytes": 2774,
+      "sha256": "ac5665561b967cb97ee0014f136eb5ba5f3cb14f4fc674de31aaee1b3cae7646"
+    },
+    {
+      "file": "version/v0.2.1/history_ui.py",
+      "bytes": 9182,
+      "sha256": "72d9f24c01f1790c33346ed75e19186d8581923b9b8ec244255a77ff1a1e5299"
+    },
+    {
+      "file": "version/v0.2.1/imgio.py",
+      "bytes": 1337,
+      "sha256": "7b0fa32a19f605cfec9981567aeef52a113da8d7759f526c51cbf25f1c794f96"
+    },
+    {
+      "file": "version/v0.2.1/main.py",
+      "bytes": 41564,
+      "sha256": "011ba94e49018bbc1d1dd21f04bfa46f1c4c092650f263f1ba95df5d8d9b2666"
+    },
+    {
+      "file": "version/v0.2.1/ocr.py",
+      "bytes": 4693,
+      "sha256": "744719055150fd31280e0608c7631842b026af6bc2626e010e68c75dee8b35fe"
+    },
+    {
+      "file": "version/v0.2.1/README.md",
+      "bytes": 250,
+      "sha256": "eccc574a2223d1511aafdb721205e31f8a0d6836501ea0dd51963d5ceba0aae3"
+    },
+    {
+      "file": "version/v0.2.1/requirements.txt",
+      "bytes": 328,
+      "sha256": "efa0d0beaed8b16bbffe2dc18a50a8cb8457cefa15d5341e9334217c118409be"
+    },
+    {
+      "file": "version/v0.2.1/roi.py",
+      "bytes": 3524,
+      "sha256": "5d7734328ca33b3f65595f8ec52e9df56a5b54898d411646fb80072ec018e7fe"
+    },
+    {
+      "file": "version/v0.2.1/runner.py",
+      "bytes": 23299,
+      "sha256": "fabeb7547146fec8661779aee51ff291e634d313e03cc62a03f7c75fa541be6a"
+    },
+    {
+      "file": "version/v0.2.1/safebox.py",
+      "bytes": 7596,
+      "sha256": "e83071d685b4adaddf011e6ab133018e3e3c7d4b239d3875a324eee7c71af97e"
+    },
+    {
+      "file": "version/v0.2.1/settings.example.json",
+      "bytes": 46,
+      "sha256": "2151b07804cd47bf29adf0f35e39aa3609ad440e2ffc492966b5cdaf5fdc2eed"
+    },
+    {
+      "file": "version/v0.2.1/storage.py",
+      "bytes": 8507,
+      "sha256": "21e43b978af685fb2b05e7b63333de6c0efc8f2fe6d4f980fd05d31d453be769"
+    },
+    {
+      "file": "version/v0.2.1/track.py",
+      "bytes": 27997,
+      "sha256": "7763f9fa2cf0aae5bab1a16de7d228a0fdb27f2ec3e6ce23305b1fad35729b35"
+    },
+    {
+      "file": "version/v0.2.1/webui.py",
+      "bytes": 30606,
+      "sha256": "ee548e9224e25d4400aeae321654c6c6afeaf4007ab8b335972bcd41fcdbf70b"
+    },
+    {
+      "file": "version/v0.2.1/启动源码.bat",
+      "bytes": 65,
+      "sha256": "ba4645e55ef8931c780ede7c156b8200d0c5c5b810db617f22120b6cf35b3458"
+    },
+    {
+      "file": "version/v0.3.0/.cargo/config.toml",
+      "bytes": 81,
+      "sha256": "53329a3ce3b81a3bcb1c083a46a8d47a09a459b457c8f2f5441fd13d9445d8b3"
+    },
+    {
+      "file": "version/v0.3.0/.gitignore",
+      "bytes": 142,
+      "sha256": "dd80eef8a299fdfc4c972b84324e159e045bb743f5f2ae72e7e322785048a622"
+    },
+    {
+      "file": "version/v0.3.0/native/assets/history.html",
+      "bytes": 9246,
+      "sha256": "8b5bd1e0fcd275ad7de558db4fcff1cb6cdafcd4c1318ec8b2531e82c4bee0a9"
+    },
+    {
+      "file": "version/v0.3.0/native/assets/index.html",
+      "bytes": 15026,
+      "sha256": "098ae73aac214986f1c001a67f20651a946c2cb03bc250cabec3929291fc6285"
+    },
+    {
+      "file": "version/v0.3.0/native/build.ps1",
+      "bytes": 242,
+      "sha256": "6e26e88d59a213bc4815a1b8393d074e5479d03da4bd80d850886467d27a316f"
+    },
+    {
+      "file": "version/v0.3.0/native/Cargo.lock",
+      "bytes": 20494,
+      "sha256": "29a5fc6c10851574584d01670d339faf8e220fe4f781abc6979b7394b793b53f"
+    },
+    {
+      "file": "version/v0.3.0/native/Cargo.toml",
+      "bytes": 718,
+      "sha256": "d2dbd915abb128620f6da9ea189259534d06d989b6b60e3276ca14927de5bea2"
+    },
+    {
+      "file": "version/v0.3.0/native/README.md",
+      "bytes": 319,
+      "sha256": "66c5e82e063110d7a2ae0f39c4cf1c5b1c43b89a5e1c34dad9ccf899213bccea"
+    },
+    {
+      "file": "version/v0.3.0/native/src/capture.rs",
+      "bytes": 5788,
+      "sha256": "7a020d0720e86511a07b1bde1a34dd91280b7c31c383ca66f36de8ec3beb85a6"
+    },
+    {
+      "file": "version/v0.3.0/native/src/core.rs",
+      "bytes": 26485,
+      "sha256": "844524b357592b809ee333974b78fcab961df7dfa358e0b0db944c24276fb270"
+    },
+    {
+      "file": "version/v0.3.0/native/src/main.rs",
+      "bytes": 21843,
+      "sha256": "7f3d3187644f91200a8f0521e673451fc1fa5c45201e567afc0884d7117e5a81"
+    },
+    {
+      "file": "version/v0.3.0/native/src/storage.rs",
+      "bytes": 10575,
+      "sha256": "9f4176de530439719913d696f559de9994efeea922f3da1763bba28586c1bdde"
+    },
+    {
+      "file": "version/v0.3.0/README.md",
+      "bytes": 440,
+      "sha256": "7111cbf03b8e4a920c9b9d451f4dfea8969088a86572243cc6a0a8ef0cbdc133"
+    },
+    {
+      "file": "version/v0.3.0/tests/fixtures/brief_red_detail.png",
+      "bytes": 186549,
+      "sha256": "f5197826e0a59acf8b450ec3409a067a88bd845fd09fc8317ab27796b2e6d8df"
+    },
+    {
+      "file": "version/v0.3.0/tests/fixtures/brief_red_work.png",
+      "bytes": 628275,
+      "sha256": "5e8c158ad4270bd0f33a345744f393cb2a41cb4c5a19a57a239902f69132b4a8"
+    },
+    {
+      "file": "version/v0.3.0/tests/fixtures/run_red_0006.png",
+      "bytes": 259670,
+      "sha256": "0c5b782905bfd3dc2c8f9ce27c7cbb0d8c7c5826ead62d42825fffab5938f412"
+    },
+    {
+      "file": "version/v0.3.0/tests/fixtures/solar_false_positive.png",
+      "bytes": 201516,
+      "sha256": "ede3227f16b7fd56723ed4b2e743a3160ff7c70d0a2ae2421611147b868ade25"
+    },
+    {
+      "file": "version/v0.3.1/.cargo/config.toml",
+      "bytes": 81,
+      "sha256": "53329a3ce3b81a3bcb1c083a46a8d47a09a459b457c8f2f5441fd13d9445d8b3"
+    },
+    {
+      "file": "version/v0.3.1/.gitignore",
+      "bytes": 142,
+      "sha256": "dd80eef8a299fdfc4c972b84324e159e045bb743f5f2ae72e7e322785048a622"
+    },
+    {
+      "file": "version/v0.3.1/environment.ps1",
+      "bytes": 2814,
+      "sha256": "2ee0e68ae309e5e2d80d4a437dc35f8f8f53674ae730315c4d682c3c3e7705c8"
+    },
+    {
+      "file": "version/v0.3.1/native/assets/history.html",
+      "bytes": 9246,
+      "sha256": "8b5bd1e0fcd275ad7de558db4fcff1cb6cdafcd4c1318ec8b2531e82c4bee0a9"
+    },
+    {
+      "file": "version/v0.3.1/native/assets/index.html",
+      "bytes": 15681,
+      "sha256": "b2312b01c1cfda6b6e4bdb7cb9f0181dd531357197942f6d0287c99969e8db25"
+    },
+    {
+      "file": "version/v0.3.1/native/build.ps1",
+      "bytes": 242,
+      "sha256": "6e26e88d59a213bc4815a1b8393d074e5479d03da4bd80d850886467d27a316f"
+    },
+    {
+      "file": "version/v0.3.1/native/Cargo.lock",
+      "bytes": 19745,
+      "sha256": "d0f78f652002803af83736afb168d2dc6e22b44563e8845aaf09fcb617da7667"
+    },
+    {
+      "file": "version/v0.3.1/native/Cargo.toml",
+      "bytes": 694,
+      "sha256": "4a03e1be08162589a6d3d2dcdad2b5c7670461b1990deafa4cf9758decc56038"
+    },
+    {
+      "file": "version/v0.3.1/native/README.md",
+      "bytes": 2149,
+      "sha256": "fc87d2ee44ab5c588c44be2270ded52c85d7708d5be8a20df5e5a897c3473884"
+    },
+    {
+      "file": "version/v0.3.1/native/src/capture.rs",
+      "bytes": 5788,
+      "sha256": "7a020d0720e86511a07b1bde1a34dd91280b7c31c383ca66f36de8ec3beb85a6"
+    },
+    {
+      "file": "version/v0.3.1/native/src/core.rs",
+      "bytes": 26485,
+      "sha256": "844524b357592b809ee333974b78fcab961df7dfa358e0b0db944c24276fb270"
+    },
+    {
+      "file": "version/v0.3.1/native/src/environment.rs",
+      "bytes": 5684,
+      "sha256": "6c422d89b2c8b34e3f7b866f9bb5ea01349b5374db9c5bd23c521e2f3f35a80c"
+    },
+    {
+      "file": "version/v0.3.1/native/src/main.rs",
+      "bytes": 22023,
+      "sha256": "ddacee13cd704b4d62d701c33b5d397ab8254b3a044ea07070a8ee47c0bc6c13"
+    },
+    {
+      "file": "version/v0.3.1/native/src/storage.rs",
+      "bytes": 10575,
+      "sha256": "9f4176de530439719913d696f559de9994efeea922f3da1763bba28586c1bdde"
+    },
+    {
+      "file": "version/v0.3.1/README.md",
+      "bytes": 145,
+      "sha256": "09476d805002ef007cd47f15535fd90cedd0d222759cd713f6fadb4483eb7c2e"
+    },
+    {
+      "file": "version/v0.3.1/tests/fixtures/brief_red_detail.png",
+      "bytes": 186549,
+      "sha256": "f5197826e0a59acf8b450ec3409a067a88bd845fd09fc8317ab27796b2e6d8df"
+    },
+    {
+      "file": "version/v0.3.1/tests/fixtures/brief_red_work.png",
+      "bytes": 628275,
+      "sha256": "5e8c158ad4270bd0f33a345744f393cb2a41cb4c5a19a57a239902f69132b4a8"
+    },
+    {
+      "file": "version/v0.3.1/tests/fixtures/run_red_0006.png",
+      "bytes": 259670,
+      "sha256": "0c5b782905bfd3dc2c8f9ce27c7cbb0d8c7c5826ead62d42825fffab5938f412"
+    },
+    {
+      "file": "version/v0.3.1/tests/fixtures/solar_false_positive.png",
+      "bytes": 201516,
+      "sha256": "ede3227f16b7fd56723ed4b2e743a3160ff7c70d0a2ae2421611147b868ade25"
+    },
+    {
+      "file": "webui.py",
+      "bytes": 30606,
+      "sha256": "ee548e9224e25d4400aeae321654c6c6afeaf4007ab8b335972bcd41fcdbf70b"
+    },
+    {
+      "file": "启动源码.bat",
+      "bytes": 65,
+      "sha256": "ba4645e55ef8931c780ede7c156b8200d0c5c5b810db617f22120b6cf35b3458"
+    },
+    {
+      "file": "docs/源码归档验证.md",
+      "bytes": 1023,
+      "sha256": "ddd1e3d0f0eecf20c2d5b0979dc4b76ded7e3fca6437ffd69740b6347efca4ae"
+    }
+  ]
+}

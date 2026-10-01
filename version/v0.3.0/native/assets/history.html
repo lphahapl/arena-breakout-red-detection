@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>暗区 · 运行历史</title>
+<style>
+:root{color-scheme:dark;--bg:#0f1115;--panel:#171a21;--line:#2a2f3a;--dim:#9ca5b5;--fg:#e6e9ef}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.6 "Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1250px;margin:auto;padding:24px}header,.toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+header{margin-bottom:24px}h1{font-size:22px;margin:0}h2{font-size:17px}a{color:#69acff;text-decoration:none}
+button,select{border:1px solid var(--line);border-radius:7px;padding:7px 12px;background:#232833;color:var(--fg);cursor:pointer}
+button:hover{border-color:#9ca5b5}button:disabled{opacity:.4;cursor:default}.dim{color:var(--dim)}
+.layout{display:grid;grid-template-columns:360px 1fr;gap:20px}.panel,.event{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+.run{display:block;width:100%;text-align:left;margin:8px 0;padding:12px}.run.active{border-color:#69acff;background:#202d40}
+.run strong{display:block;font-size:14px}.run span{font-size:12px;color:var(--dim)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}.stat{background:#20242d;padding:12px;border-radius:8px}
+.stat b{display:block;font-size:25px}.red{color:#fa696e}.green{color:#66cc87}.badge{border:1px solid var(--line);border-radius:5px;padding:2px 8px;font-size:12px}
+.event{margin:12px 0}.event-top{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.shots{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.shots img{max-width:260px;width:100%;height:130px;object-fit:contain;background:#080a0d;border:1px solid var(--line);border-radius:7px;cursor:zoom-in}
+.review{margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px}.review button{font-size:12px}
+#error{color:#ff8585;margin:12px 0}#viewer{position:fixed;inset:0;background:#000e;display:none;align-items:center;justify-content:center;padding:24px;z-index:10;cursor:zoom-out}
+#viewer img{max-width:100%;max-height:100%}pre{white-space:pre-wrap;font:12px/1.6 monospace}
+@media(max-width:800px){.layout{grid-template-columns:1fr}main{padding:14px}.shots img{max-width:100%}}
+</style></head><body><main>
+<header><h1>运行历史</h1><a href="/">返回实时检测</a><span class="dim">记录保存在本机，关闭程序后仍可查看</span></header>
+<div id="error" role="alert"></div>
+<div class="layout"><section class="panel"><div class="toolbar"><b id="runCount">全部运行</b><button id="refresh">刷新</button></div>
+<div id="runs">正在读取…</div><div class="toolbar"><button id="prev">上一页</button><span id="pagination"></span><button id="next">下一页</button></div></section>
+<section><div class="panel" id="summary">选择左侧的一次运行查看记录</div>
+<div class="toolbar" style="margin-top:16px"><b>检测记录</b><select id="filter"><option value="settled">结算与未完成</option><option value="all">全部事件</option><option value="red">出红</option><option value="clean">无红</option><option value="incomplete">未完成</option></select></div>
+<div id="events"></div></section></div></main><div id="viewer"><img alt="检测截图"></div>
+<script>
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const statuses={running:'运行中',stopped:'已停止',error:'异常结束',interrupted:'程序中断',legacy:'旧版记录'};
+const kinds={start:'开箱',red:'出红',clean:'无红',incomplete:'未完成'};
+const labels={red:'确认出红',clean:'确认无红',uncertain:'无法判断'};
+let offset=0,total=0,runs=[],selected=new URLSearchParams(location.search).get('run'),events=[],revision=0;
+async function api(url,options){const r=await fetch(url,options);const d=await r.json();if(!r.ok)throw new Error(d.error||'读取失败');return d;}
+function duration(v){if(v==null)return '—';let n=Math.round(v);return `${Math.floor(n/3600)}小时 ${Math.floor(n%3600/60)}分 ${n%60}秒`;}
+function renderRuns(){
+ $('runCount').textContent=`共 ${total} 次运行`;
+ $('runs').innerHTML=runs.map(r=>`<button class="run ${r.id===selected?'active':''}" data-run="${esc(r.id)}"><strong>${esc(r.started_at||r.id)}</strong><span>${esc(statuses[r.status]||r.status)} · 结算 ${r.total} · 出红 ${r.counts.red} · 未完成 ${r.counts.incomplete}</span></button>`).join('')||'<p class="dim">还没有运行记录</p>';
+ $('runs').querySelectorAll('[data-run]').forEach(b=>b.onclick=()=>selectRun(b.dataset.run));
+ $('pagination').textContent=`${Math.floor(offset/30)+1} / ${Math.max(1,Math.ceil(total/30))}`;
+ $('prev').disabled=offset===0;$('next').disabled=offset+30>=total;
+}
+function renderSummary(r){
+ const m=r.metrics||{};
+ $('summary').innerHTML=`<h2>${esc(r.started_at||r.id)}</h2><div class="dim">${esc(statuses[r.status]||r.status)} · 窗口：${esc(r.target||r.window||'旧版未保存')}</div>
+ <div class="stats"><div class="stat">已结算<b>${r.total}</b></div><div class="stat red">出红次数<b>${r.counts.red}</b></div><div class="stat green">无红次数<b>${r.counts.clean}</b></div></div>
+ <div class="dim">开始时间：${esc(r.started_at||'旧版未记录')} · 结束时间：${esc(r.stopped_at||'未记录')}</div>
+ <div class="dim">运行时长：${duration(r.duration_s)} · 出红率：${r.red_rate==null?'—':r.red_rate.toFixed(2)+'%'} · 未完成：${r.counts.incomplete}</div>
+ <div class="dim">出红率 = 自动检测出红次数 ÷ 完整结算次数，人工复核另行保留</div>
+ <div class="dim">已复核 ${r.reviewed} 条 · 标记误报 ${r.false_positive} 条 · 标记漏报 ${r.missed} 条</div>
+ ${r.status==='legacy'?'<p class="dim">旧版未保存运行起止时间和耗时；事件时间与截图仍可查看。</p>':''}
+ ${r.error?`<p class="red">${esc(r.error)}</p>`:''}
+ <details><summary>运行信息</summary><p>观察 ${m.obs||0} 轮 · 平均处理 ${m.cycle_avg_ms??'—'} ms · 采样间隔 ${r.interval??'—'} 秒</p><pre>${esc(JSON.stringify(r.config||{},null,2))}</pre></details>`;
+}
+function renderEvents(){
+ const filter=$('filter').value;
+ const shown=events.filter(e=>filter==='all'||(filter==='settled'?e.kind!=='start':e.kind===filter));
+ $('events').innerHTML=shown.slice().reverse().map(e=>`<article class="event"><div class="event-top"><span class="badge ${e.kind==='red'?'red':''}">${esc(kinds[e.kind]||e.kind)}</span><b>${esc(e.text)}</b><span class="dim">${esc(e.t)}</span></div>
+ ${e.item_names?.filter(Boolean).length?`<div>物品 OCR：${esc(e.item_names.filter(Boolean).join(' / '))}</div>`:''}<div class="dim">观察 ${e.observations??0} 轮${e.end_reason?' · '+esc(e.end_reason):''}</div>
+ <div class="shots">${(e.shots||[]).map(s=>`<img loading="lazy" alt="${esc(kinds[e.kind])}截图" src="/shot/${encodeURIComponent(selected)}/${encodeURIComponent(s)}">`).join('')}</div>
+ ${e.kind!=='start'?`<div class="review"><span>人工复核：${esc(labels[e.review]||'未复核')}</span><button data-seq="${e.seq}" data-label="red">确认出红</button><button data-seq="${e.seq}" data-label="clean">确认无红</button><button data-seq="${e.seq}" data-label="uncertain">无法判断</button><button data-seq="${e.seq}" data-label="">撤销复核</button></div>`:''}</article>`).join('')||'<p class="dim">这次运行没有符合筛选条件的记录</p>';
+ $('events').querySelectorAll('.shots img').forEach(img=>img.onclick=()=>{$('viewer').querySelector('img').src=img.src;$('viewer').style.display='flex';});
+ $('events').querySelectorAll('[data-seq]').forEach(b=>b.onclick=async()=>{
+  b.disabled=true;try{await api('/api/review',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({run:selected,seq:Number(b.dataset.seq),label:b.dataset.label||null})});await selectRun(selected);}catch(e){$('error').textContent=e.message;}finally{b.disabled=false;}
+ });
+}
+async function selectRun(id){
+ selected=id;history.replaceState(null,'','/history?run='+encodeURIComponent(id));renderRuns();
+ const token=++revision;
+ try{const [detail,data]=await Promise.all([api('/api/run?run='+encodeURIComponent(id)),api('/api/events?run='+encodeURIComponent(id))]);if(token!==revision)return;events=data.events;renderSummary(detail);renderEvents();$('error').textContent='';}catch(e){$('error').textContent=e.message;}
+}
+async function load(){try{const d=await api(`/api/history?limit=30&offset=${offset}`);runs=d.runs;total=d.total;renderRuns();if(!selected&&runs.length)selected=runs[0].id;if(selected)await selectRun(selected);$('error').textContent='';}catch(e){$('error').textContent=e.message;}}
+$('refresh').onclick=load;$('prev').onclick=()=>{offset=Math.max(0,offset-30);load();};$('next').onclick=()=>{offset+=30;load();};$('filter').onchange=renderEvents;
+$('viewer').onclick=()=>{$('viewer').style.display='none';};document.addEventListener('keydown',e=>{if(e.key==='Escape')$('viewer').style.display='none';});
+load();
+</script></body></html>

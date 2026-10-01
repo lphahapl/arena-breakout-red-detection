@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+runtime/
+target/
+runs/
+logs/
+debug/
+settings.json
+*.sqlite3*
+*.db
+*.exe
+*.zip
+.env
+.env.*

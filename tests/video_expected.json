@@ -1,0 +1,10 @@
+{
+  "scope": "每次保险箱面板完整打开并关闭算一次；只计右侧被搜索保险箱中的红品，左侧背包、地上拾取、其他容器不计；不去重",
+  "manual_notes": "根据完整播放的实际桌面画面和联系图人工判读，测试结果不作为期望值来源。早期暂停后 CDP 截图有滞后，已弃用其期望。时间为剪辑视频时间，允许边界约 2 秒误差。",
+  "videos": [
+    {"id":"BV16NosBLEQn","total":3,"red":2,"visits":[{"from":42,"to":51,"result":"red","item":"古董茶壶"},{"from":220,"to":224,"result":"clean"},{"from":238,"to":247,"result":"red","item":"目标定位模块"}],"note":"以完整播放联系图 0050/0233/end 和物品原图为准"},
+    {"id":"BV13khe6hEDQ","total":3,"red":2,"visits":[{"from":18,"to":25,"result":"red","item":"耐美拉彩蛋"},{"from":26,"to":34,"result":"red","item":"月壤样本"},{"from":95,"to":102,"result":"clean"}],"note":"月壤样本约 29.4 秒短暂高亮显示；前后背包、大金展示与队友搜出的物品不计入"},
+    {"id":"BV1hUje6xENB","total":0,"red":0,"visits":[],"note":"战斗视频，无保险箱搜索面板"},
+    {"id":"BV1XTjw6PEcN","total":5,"red":2,"visits":[{"from":17,"to":23,"result":"clean"},{"from":48,"to":54,"result":"clean"},{"from":90,"to":98,"result":"red","item":"目标定位模块"},{"from":126,"to":131,"result":"red","item":"混沌质"},{"from":162,"to":169,"result":"clean"}],"note":"约 123 秒桌面上的耐美拉彩蛋是地上拾取，未计为保险箱出红"}
+  ]
+}

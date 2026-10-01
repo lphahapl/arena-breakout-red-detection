@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>暗区 · 出红记录</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --panel2:#1e222b; --line:#2a2f3a;
+    --fg:#e6e9ef; --dim:#8b93a5; --red:#e5484d; --green:#3fb950;
+    --amber:#e3b341; --blue:#4493f8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);
+       font:14px/1.5 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+  .wrap{max-width:1100px;margin:0 auto;padding:20px}
+  header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+  h1{font-size:18px;margin:0;font-weight:600}
+  .pill{padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;
+        background:var(--panel2);color:var(--dim);border:1px solid var(--line)}
+  .pill.on{background:rgba(63,185,80,.15);color:var(--green);border-color:rgba(63,185,80,.4)}
+  .pill.err{background:rgba(229,72,77,.15);color:var(--red);border-color:rgba(229,72,77,.4)}
+  .spacer{flex:1}
+  button{background:var(--panel2);color:var(--fg);border:1px solid var(--line);
+         border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer}
+  button:hover{border-color:var(--dim)}
+  button.primary{background:var(--green);color:#04170a;border-color:var(--green)}
+  button.danger{background:var(--red);color:#1a0405;border-color:var(--red)}
+  button:disabled{opacity:.4;cursor:not-allowed}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+         gap:12px;margin-bottom:20px}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .stat .k{font-size:12px;color:var(--dim);margin-bottom:6px}
+  .stat .v{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+  .stat.red .v{color:var(--red)}
+  .stat.green .v{color:var(--green)}
+  .stat .sub{font-size:11px;color:var(--dim);margin-top:4px}
+
+  h2{font-size:13px;color:var(--dim);font-weight:600;margin:24px 0 10px;
+     text-transform:uppercase;letter-spacing:.06em}
+  .feed{display:flex;flex-direction:column;gap:10px}
+  .card{display:flex;gap:14px;background:var(--panel);border:1px solid var(--line);
+        border-radius:12px;padding:12px;align-items:flex-start}
+  .card.red{border-color:rgba(229,72,77,.5);background:rgba(229,72,77,.06)}
+  .card .thumb{width:104px;height:78px;object-fit:cover;border-radius:8px;
+               border:1px solid var(--line);cursor:zoom-in;background:#000;flex:none}
+  .card .body{flex:1;min-width:0}
+  .card .top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+  .badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px}
+  .badge.red{background:var(--red);color:#fff}
+  .badge.clean{background:var(--panel2);color:var(--dim);border:1px solid var(--line)}
+  .badge.start{background:rgba(68,147,248,.18);color:var(--blue);border:1px solid rgba(68,147,248,.35)}
+  .card .t{font-size:12px;color:var(--dim);font-variant-numeric:tabular-nums}
+  .card .meta{font-size:12px;color:var(--dim);display:flex;gap:12px;flex-wrap:wrap}
+  .card .meta b{color:var(--fg);font-weight:600}
+  .empty{color:var(--dim);text-align:center;padding:48px 0;font-size:13px}
+
+  #lb{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;
+      align-items:center;justify-content:center;cursor:zoom-out;z-index:99;padding:24px}
+  #lb img{max-width:100%;max-height:100%;border-radius:8px}
+  .err{background:rgba(229,72,77,.12);border:1px solid rgba(229,72,77,.4);
+       color:var(--red);padding:10px 14px;border-radius:10px;margin-bottom:14px;
+       font-size:13px;display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>暗区 · 出红记录</h1>
+    <a href="/history" style="color:var(--blue)">运行历史</a>
+    <span class="pill" id="statePill">未运行</span>
+    <span class="pill" id="fgPill" style="display:none">游戏不在前台</span>
+    <div class="spacer"></div>
+    <select id="winSel" title="选择游戏窗口" style="background:var(--panel2);color:var(--fg);
+            border:1px solid var(--line);border-radius:8px;padding:8px 10px;
+            font-size:13px;max-width:240px"></select>
+    <button id="btnWin" title="重新扫描窗口列表">刷新列表</button>
+    <button id="btnPrev" title="抓一帧看看实际抓到什么">预览</button>
+    <select id="runSel" title="查看历史记录" style="background:var(--panel2);color:var(--fg);
+            border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px"></select>
+    <button id="btnStart" class="primary">开始检测</button>
+    <button id="btnStop" class="danger" disabled>停止</button>
+  </header>
+
+  <div class="err" id="errBox"></div>
+
+  <!-- 抓屏预览：选错窗口时必须让人一眼看出来 -->
+  <div class="card" id="prevCard" style="margin-bottom:18px">
+    <div class="body">
+      <div class="top">
+        <span class="badge start">抓屏预览</span>
+        <span style="font-size:12px;color:var(--dim)">
+          这是工具实际看到的画面，黄框 = 工作区。切到游戏再点刷新，
+          <b style="color:var(--fg)">确认看到的是游戏而不是别的窗口</b>。
+        </span>
+      </div>
+      <div id="prevEmpty" style="color:var(--dim);font-size:13px;padding:14px 0">
+        还没选窗口 —— 右上角选一个，然后点【预览】
+      </div>
+      <img id="prevImg" style="display:none;max-width:100%;border-radius:8px;
+           border:1px solid var(--line);margin-top:8px">
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat green"><div class="k">当前连续未出红</div>
+      <div class="v" id="sStreak">0</div>
+      <div class="sub" id="sStreakSub">个保险箱</div></div>
+    <div class="stat"><div class="k">已结算保险箱</div>
+      <div class="v" id="sTotal">0</div>
+      <div class="sub">本次运行</div></div>
+    <div class="stat red"><div class="k">出红次数</div>
+      <div class="v" id="sReds">0</div>
+      <div class="sub">本次运行</div></div>
+    <div class="stat"><div class="k">容器名 OCR 平均耗时</div>
+      <div class="v" id="sOcr">—</div>
+      <div class="sub" id="sObs">0 轮</div></div>
+    <div class="stat"><div class="k">每轮平均处理耗时</div>
+      <div class="v" id="sCycle">—</div>
+      <div class="sub" id="sItemOcr">物品 OCR：—</div></div>
+  </div>
+
+  <div class="card" id="curCard" style="display:none">
+    <div class="body">
+      <div class="top"><span class="badge start">进行中</span>
+        <span id="curText"></span></div>
+      <div class="meta" id="curMeta"></div>
+    </div>
+  </div>
+
+  <h2>检测记录</h2>
+  <div class="feed" id="feed"><div class="empty">还没有记录</div></div>
+</div>
+
+<div id="lb"><img id="lbImg" alt=""></div>
+
+<script>
+// 有任何 JS 错误直接显示在页面上，避免「页面看着正常但什么都不动」
+window.onerror = function(msg, src, line){
+  const b = document.getElementById('errBox');
+  if(b){ b.textContent = 'JS 错误: ' + msg + ' (第 ' + line + ' 行)'; b.style.display = 'block'; }
+};
+
+const $ = id => document.getElementById(id);
+let sinceSeq = 0, curRun = null, events = [], runsLoaded = false, commandError = '';
+
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,
+  c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function fmtCells(c){
+  if(!c) return '—';
+  const r = v => Math.round(v);
+  return r(c[0]) + '×' + r(c[1]);
+}
+
+function card(e){
+  const img = e.shots && e.shots.length
+    ? `<img class="thumb" src="/shot/${encodeURIComponent(e.run||curRun)}/${encodeURIComponent(e.shots[0])}" onclick="zoom(this.src)">`
+    : `<div class="thumb"></div>`;
+  const badge = e.kind==='red' ? '<span class="badge red">出红</span>'
+              : e.kind==='clean' ? '<span class="badge clean">无红</span>'
+              : e.kind==='incomplete' ? '<span class="badge start">未完成</span>'
+              : '<span class="badge start">开箱</span>';
+  const shown = e.shots && e.shots.length > 1
+    ? e.shots.slice(1).map(s =>
+        `<a href="#" onclick="zoom('/shot/${encodeURIComponent(e.run||curRun)}/${encodeURIComponent(s)}');return false"
+            style="color:var(--amber)">标注图</a>`).join('')
+    : '';
+  const streak = e.kind==='clean'
+    ? `连续 <b>${e.streak}</b> 个未出红`
+    : e.kind==='red' ? `连续 <b>${e.streak}</b> 个被打断` : '';
+  return `<div class="card ${e.kind==='red'?'red':''}">
+    ${img}
+    <div class="body">
+      <div class="top">${badge}<span class="t">${esc((e.t||'').replace('T',' '))}</span>
+        ${e.text?`<span style="font-size:12px;color:var(--dim)">${esc(e.text)}</span>`:''}</div>
+      <div class="meta">
+        ${e.item_names && e.item_names.filter(Boolean).length
+            ? `<span>物品 OCR <b style="color:var(--amber)">${esc(e.item_names.filter(Boolean).join(' / '))}</b></span>`
+            : ''}
+        <span>${streak}</span>
+        ${e.red_count?`<span>命中色块 <b>${e.red_count}</b></span>`:''}
+        ${e.observations?`<span>观察 <b>${e.observations}</b> 轮</span>`:''}
+        ${shown}
+      </div>
+    </div>
+  </div>`;
+}
+
+function render(){
+  const f = $('feed');
+  if(!events.length){ f.innerHTML = '<div class="empty">还没有记录</div>'; return; }
+  f.innerHTML = events.map(card).join('');
+}
+
+function zoom(src){ $('lbImg').src = src; $('lb').style.display='flex'; }
+$('lb').onclick = () => { $('lb').style.display='none'; $('lbImg').src=''; };
+
+async function poll(){
+  try{
+    const st = await (await fetch('/api/status')).json();
+    $('statePill').textContent = st.running ? '运行中' : '未运行';
+    $('statePill').className = 'pill' + (st.running?' on':'');
+    $('fgPill').style.display = (st.running && st.foreground === false) ? '' : 'none';
+    $('winSel').disabled = st.running;
+    $('btnWin').disabled = st.running;
+    $('sStreak').textContent = st.streak;
+    $('sTotal').textContent = st.total;
+    $('sReds').textContent = events.filter(e=>e.kind==='red').length;
+    $('sOcr').textContent = st.ocr_ms ? st.ocr_ms.toFixed(0)+'ms' : '—';
+    $('sObs').textContent = st.obs + ' 轮';
+    $('sCycle').textContent = st.cycle_avg_ms != null ? st.cycle_avg_ms.toFixed(0)+'ms' : '—';
+    $('sItemOcr').textContent = '物品 OCR：' + (st.item_ocr_ms ? st.item_ocr_ms.toFixed(0)+'ms' : '—');
+    $('btnStart').disabled = st.running;
+    $('btnStop').disabled = !st.running;
+
+    const box = $('errBox');
+    if(st.error || commandError){ box.textContent = st.error || commandError; box.style.display='block'; }
+    else box.style.display='none';
+
+    if(st.current){
+      $('curCard').style.display='';
+      $('curText').textContent = st.current.ocr_text || '';
+      const nb = st.current.name_bbox;
+      $('curMeta').innerHTML =
+        (nb && nb.length ? `<span>名字位置 <b>(${nb[0]},${nb[1]})</b></span>` : '') +
+        `<span>已观察 <b>${st.current.observations ?? 0}</b> 轮</span>` +
+        `<span>${st.misses ? `丢失 <b style="color:var(--amber)">${st.misses}/${st.miss_need}</b>` : ''}</span>` +
+        `<span>${st.current.red?'<b style="color:var(--red)">已见红</b>':'暂未见红'}</span>`;
+    } else $('curCard').style.display='none';
+
+    if(!runsLoaded){ runsLoaded = true; refreshRuns(); }
+    if(!curRun && st.run_dir){ curRun = st.run_dir; sinceSeq = 0; events = []; refreshRuns(); }
+    if(st.run_dir && curRun && st.run_dir !== curRun){ curRun = st.run_dir; sinceSeq = 0; events = []; refreshRuns(); }
+
+    const d = await (await fetch(`/api/events?since=${sinceSeq}&run=${encodeURIComponent(curRun||'')}`)).json();
+    if(d.events && d.events.length){
+      events = events.concat(d.events.map(e => ({...e, run: curRun})));
+      sinceSeq = d.last_seq;
+      render();
+    }
+  }catch(err){ /* 服务器没起来时静默重试 */ }
+}
+
+async function refreshRuns(){
+  try{
+    const d = await (await fetch('/api/runs')).json();
+    const sel = $('runSel');
+    sel.innerHTML = d.runs.map(r =>
+      `<option value="${esc(r)}"${r===curRun?' selected':''}>${esc(r)}</option>`).join('');
+  }catch(e){}
+}
+
+$('runSel').onchange = async () => {
+  location.href = '/history?run=' + encodeURIComponent($('runSel').value);
+};
+
+async function refreshWindows(){
+  try{
+    const d = await (await fetch('/api/windows')).json();
+    const sel = $('winSel');
+    const cur = d.current || '';
+    sel.innerHTML = '<option value="">— 选择游戏窗口 —</option>' +
+      d.windows.map(w => `<option value="${esc(w.title)}"${w.title===cur?' selected':''}>` +
+        `${esc(w.title)}  (${w.w}×${w.h})</option>`).join('');
+  }catch(e){}
+}
+
+$('winSel').onchange = async () => {
+  const title = $('winSel').value;
+  const r = await (await fetch('/api/window', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({title})
+  })).json();
+  if(!r.ok){ commandError=r.error; const b=$('errBox'); b.textContent=r.error; b.style.display='block'; }
+  else { commandError=''; const b=$('errBox'); b.style.display='none'; loadPreview(); }
+};
+
+async function loadPreview(){
+  const t = $('winSel').value || '';
+  const img = $('prevImg'), empty = $('prevEmpty');
+  if(!t){ empty.style.display=''; empty.textContent='还没选窗口 —— 右上角选一个，然后点【预览】';
+          img.style.display='none'; return; }
+  empty.style.display=''; empty.textContent='抓取中…';
+  img.style.display='none';
+  const url = '/api/preview?w=' + encodeURIComponent(t) + '&t=' + Date.now();
+  const r = await fetch(url);
+  if(!r.ok){
+    let msg = r.status;
+    try{ msg = (await r.json()).error || msg; }catch(e){}
+    empty.textContent = '预览失败：' + msg;
+    return;
+  }
+  const blob = await r.blob();
+  img.src = URL.createObjectURL(blob);
+  img.style.display = '';
+  empty.style.display = 'none';
+}
+
+$('btnPrev').onclick = loadPreview;
+$('btnWin').onclick = refreshWindows;
+async function command(path){
+  try{const response=await fetch(path,{method:'POST'});const data=await response.json();
+      commandError=response.ok?'':data.error||'操作失败';}
+  catch(e){commandError='连接失败：'+e.message;}
+  await poll();
+}
+$('btnStart').onclick = () => command('/api/start');
+$('btnStop').onclick = () => command('/api/stop');
+
+refreshRuns();
+refreshWindows();
+poll();
+setInterval(poll, 900);
+</script>
+<script>const quit=document.createElement("button");quit.textContent="退出程序";quit.onclick=()=>fetch("/api/quit",{method:"POST"}).then(()=>document.body.innerHTML="<p>程序已退出，可以关闭此页。</p>");document.querySelector("header").append(quit);</script></body>
+</html>
