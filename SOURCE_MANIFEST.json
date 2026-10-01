@@ -675,6 +675,11 @@
       "file": "docs/源码归档验证.md",
       "bytes": 1023,
       "sha256": "ddd1e3d0f0eecf20c2d5b0979dc4b76ded7e3fca6437ffd69740b6347efca4ae"
+    },
+    {
+      "file": ".gitattributes",
+      "bytes": 78,
+      "sha256": "512ccbdfb74f97c93deb6c0f42844e821d6fc8feb36b65730b19ca8023814234"
     }
   ]
 }
