@@ -53,11 +53,11 @@ impl Default for Config {
             container_keyword: "保险箱".into(),
             ocr_interval: 0.5,
             ocr_full_interval: 1.0,
-            red_sat_min: 65.,
-            red_val_min: 60,
+            red_sat_min: 55.,
+            red_val_min: 40,
             red_gb_ratio_max: 0.28,
             red_highlight_val_min: 180.,
-            red_highlight_sat_min: 25.,
+            red_highlight_sat_min: 20.,
             red_highlight_gb_max: 0.08,
             red_hue_max: 9.,
             red_hue_wrap_min: 170.,
@@ -113,6 +113,8 @@ pub struct Engine {
 }
 impl Engine {
     pub fn new() -> Result<Self> {
+        #[cfg(test)]
+        crate::runtime::keep_test_mta();
         let apartment = crate::runtime::Apartment::new()?;
         let lang = Language::CreateLanguage(&HSTRING::from("zh-Hans-CN"))?;
         Ok(Self {
@@ -121,6 +123,8 @@ impl Engine {
         })
     }
     pub fn recognize(&self, image: &RgbImage, scale: f64) -> Result<Vec<Line>> {
+        let limit = OcrEngine::MaxImageDimension()? as f64;
+        let scale = scale.min(limit / image.width().max(image.height()) as f64);
         let scaled;
         let im = if scale == 1. {
             image
@@ -270,7 +274,7 @@ fn find_red_cells(image: &RgbImage, cfg: &Config, exclude: Rect, cell: f64) -> V
             // Dark orange/brown rarity backgrounds overlap the broad hue range.
             // Preserve warm highlights; shadowed red backgrounds have G close to B.
             && (max >= 100. || hue <= 6. || hue >= 174.);
-        let highlight = (hue <= cfg.red_hue_max.min(6.) || hue >= cfg.red_hue_wrap_min.max(174.))
+        let highlight = (hue <= cfg.red_hue_max || hue >= cfg.red_hue_wrap_min)
             && sat >= cfg.red_highlight_sat_min
             && max >= cfg.red_highlight_val_min
             && gb <= cfg.red_highlight_gb_max;
@@ -325,12 +329,12 @@ fn find_red_cells(image: &RgbImage, cfg: &Config, exclude: Rect, cell: f64) -> V
         if extent < cfg.red_extent_min {
             reject.push("extent".into());
         }
-        if aspect <= 0.35 || aspect >= 2.8 {
+        if aspect <= 0.22 || aspect >= 4.5 {
             reject.push("aspect".into());
         }
         let cell = cell.max(1.);
-        if (bw as f64) < cell
-            || (bh as f64) < cell
+        if (bw as f64) < cell * 0.9
+            || (bh as f64) < cell * 0.9
             || ((bw * bh) as f64) < cell * cell * 2.
             || bw as f64 > cell * 4.
             || bh as f64 > cell * 4.
@@ -363,7 +367,36 @@ fn safe_title(text: &str, keyword: &str) -> bool {
 }
 // Measure the actual inventory lattice instead of inferring a slot from OCR height.
 // Three equally spaced long neutral dividers must begin near the title's left edge.
-fn grid_cell(work: &RgbImage, anchor: Rect) -> Option<f64> {
+#[derive(Clone, Copy)]
+struct Grid {
+    cell: f64,
+    left: f64,
+    top: Option<f64>,
+}
+impl Grid {
+    fn aligned(&self, r: Rect) -> bool {
+        let near = |v: f64, origin: f64| {
+            let n = ((v - origin) / self.cell).round();
+            (v - origin - n * self.cell).abs() <= (self.cell * 0.12).max(4.)
+        };
+        let horizontal = [r[0], r[0] + r[2]]
+            .into_iter()
+            .filter(|&x| near(x as f64, self.left))
+            .count();
+        match self.top {
+            Some(top) => {
+                horizontal
+                    + [r[1], r[1] + r[3]]
+                        .into_iter()
+                        .filter(|&y| near(y as f64, top))
+                        .count()
+                    >= 3
+            }
+            None => horizontal == 2,
+        }
+    }
+}
+fn inventory_grid(work: &RgbImage, anchor: Rect) -> Option<Grid> {
     let panel = panel_rect(anchor);
     let left = panel[0].max(3) as usize;
     let right = (panel[0] + panel[2]).min(work.width() as i32 - 3).max(0) as usize;
@@ -405,11 +438,53 @@ fn grid_cell(work: &RgbImage, anchor: Rect) -> Option<f64> {
                 continue;
             }
             if let Some(&third) = columns.iter().find(|&&x| (x - second - gap).abs() <= 3) {
-                return Some((third - first) as f64 / 2.);
+                let cell = (third - first) as f64 / 2.;
+                let end_x = (first + (cell * 5.) as i32).min(work.width() as i32) as u32;
+                let start_y = top.max(3);
+                let end_y = (anchor[1] + anchor[3] * 4)
+                    .min(work.height() as i32 - 3)
+                    .max(0) as usize;
+                let grid_top = (start_y..end_y).find(|&y| {
+                    let below = (y + 6).min(work.height() as usize - 1) as u32;
+                    let intersections = [first, second, third]
+                        .into_iter()
+                        .filter(|&x| {
+                            let v = gray(work.get_pixel(x as u32, below));
+                            v >= 30.
+                                && (v - gray(work.get_pixel((x - 3) as u32, below))).abs() >= 8.
+                                && (v - gray(work.get_pixel((x + 3) as u32, below))).abs() >= 8.
+                        })
+                        .count();
+                    if intersections < 2 {
+                        return false;
+                    }
+                    let count = (first.max(0) as u32..end_x)
+                        .filter(|&x| {
+                            let p = work.get_pixel(x, y as u32);
+                            let max = *p.0.iter().max().unwrap() as f64;
+                            let min = *p.0.iter().min().unwrap() as f64;
+                            let v = gray(p);
+                            max - min <= max * 0.40
+                                && v >= 30.
+                                && (v - gray(work.get_pixel(x, y as u32 - 3))).abs() >= 8.
+                                && (v - gray(work.get_pixel(x, y as u32 + 3))).abs() >= 8.
+                        })
+                        .count();
+                    count as f64 >= cell * 2.
+                });
+                return Some(Grid {
+                    cell,
+                    left: first as f64,
+                    top: grid_top.map(|y| y as f64),
+                });
             }
         }
     }
     None
+}
+#[cfg(test)]
+fn grid_cell(work: &RgbImage, anchor: Rect) -> Option<f64> {
+    inventory_grid(work, anchor).map(|grid| grid.cell)
 }
 pub fn iou(a: Rect, b: Rect) -> f64 {
     let overlap = (a[0] + a[2])
@@ -461,7 +536,7 @@ pub struct Tracker {
     votes: Vec<Vec<Rect>>,
     cache: HashMap<u64, (String, String)>,
     pub candidates: Vec<Blob>,
-    measured_cell: Option<(Rect, f64)>,
+    measured_cell: Option<(Rect, Grid)>,
 }
 pub struct Step {
     pub kind: Option<String>,
@@ -539,7 +614,7 @@ impl Tracker {
                 if safe_title(&line.text, &self.cfg.container_keyword) {
                     line.bbox[0] += rect[0];
                     line.bbox[1] += rect[1];
-                    let Some(cell) = grid_cell(work, line.bbox) else {
+                    let Some(cell) = inventory_grid(work, line.bbox) else {
                         continue;
                     };
                     self.measured_cell = Some((line.bbox, cell));
@@ -564,15 +639,28 @@ impl Tracker {
             anchor[2] + 2 * (anchor[2] as f64 * 0.6) as i32,
             anchor[3] + 2 * (anchor[3] as f64 * 0.8) as i32,
         ];
-        let cell = match self.measured_cell {
+        let grid = match self.measured_cell {
             Some((old, cell)) if old == anchor => cell,
             _ => {
-                let cell = grid_cell(work, anchor).unwrap_or(anchor[3] as f64 * 4.);
+                let cell = inventory_grid(work, anchor).unwrap_or(Grid {
+                    cell: anchor[3] as f64 * 4.,
+                    left: anchor[0] as f64,
+                    top: None,
+                });
                 self.measured_cell = Some((anchor, cell));
                 cell
             }
         };
-        let mut blobs = find_red_cells(&sub, &self.cfg, exclude, cell);
+        let mut blobs = find_red_cells(&sub, &self.cfg, exclude, grid.cell);
+        for b in blobs.iter_mut().filter(|b| b.accepted) {
+            let mut r = b.bbox;
+            r[0] += panel[0];
+            r[1] += panel[1];
+            if !grid.aligned(r) {
+                b.accepted = false;
+                b.reject.push("槽位边缘不对齐".into());
+            }
+        }
         self.votes.push(
             blobs
                 .iter()
@@ -693,6 +781,25 @@ impl Tracker {
             visible: false,
             reds: vec![],
         }
+    }
+    pub fn pause(&mut self, reason: &str) -> Step {
+        let step = if self.session.is_some() {
+            self.end(reason, true)
+        } else {
+            Step {
+                kind: None,
+                session: None,
+                visible: false,
+                reds: vec![],
+            }
+        };
+        self.idle_anchor = None;
+        self.measured_cell = None;
+        self.last_ocr = None;
+        self.last_full = None;
+        self.votes.clear();
+        self.candidates.clear();
+        step
     }
     pub fn step(&mut self, work: &RgbImage) -> Result<Step> {
         if self.session.is_none() {
@@ -835,7 +942,40 @@ mod tests {
     use super::*;
     #[test]
     #[ignore = "requires private local feedback screenshots"]
+    fn flute_and_skateboard_feedback() {
+        let _runtime = crate::runtime::Apartment::new().unwrap();
+        let base = std::path::PathBuf::from(std::env::var("AB_RED_PRIVATE_FIXTURES").unwrap());
+        let mut failures = vec![];
+        for (file, anchor, want) in [
+            ("feedback_flute_hover.png", [36, 52, 107, 26], true),
+            ("feedback_flute_dark.png", [37, 42, 105, 21], true),
+            ("feedback_skateboard.png", [35, 46, 107, 23], false),
+        ] {
+            let image = image::open(base.join(file)).unwrap().to_rgb8();
+            for scale in [0.75, 1., 1.5] {
+                let image = imageops::resize(
+                    &image,
+                    (image.width() as f64 * scale).round() as u32,
+                    (image.height() as f64 * scale).round() as u32,
+                    imageops::FilterType::CatmullRom,
+                );
+                let anchor = anchor.map(|v| (v as f64 * scale).round() as i32);
+                let mut tracker = Tracker::new(Config::default()).unwrap();
+                tracker.scan(&image, anchor).unwrap();
+                if !tracker.scan(&image, anchor).unwrap().is_empty() != want {
+                    failures.push(format!("{file} at {scale}: {:?}", tracker.candidates));
+                }
+            }
+        }
+        assert!(
+            failures.is_empty(),
+            "incorrect feedback results: {failures:?}"
+        );
+    }
+    #[test]
+    #[ignore = "requires private local feedback screenshots"]
     fn feedback_false_positives() {
+        let _runtime = crate::runtime::Apartment::new().unwrap();
         let base = std::path::PathBuf::from(
             std::env::var("AB_RED_PRIVATE_FIXTURES")
                 .expect("set AB_RED_PRIVATE_FIXTURES to the private fixture directory"),
@@ -935,6 +1075,38 @@ mod tests {
         }
     }
     #[test]
+    fn long_red_background_and_grid_edges() {
+        let mut image = RgbImage::from_pixel(600, 420, image::Rgb([20, 20, 20]));
+        for y in 94..177 {
+            for x in 34..287 {
+                image.put_pixel(x, y, image::Rgb([55, 26, 22]));
+            }
+        }
+        assert!(find_red_cells(&image, &Config::default(), [0; 4], 85.)
+            .iter()
+            .any(|b| b.accepted));
+        let g = Grid {
+            cell: 85.,
+            left: 33.,
+            top: Some(93.),
+        };
+        assert!(g.aligned([34, 94, 253, 83]));
+        assert!(g.aligned([34, 94, 220, 83])); // Tooltip may truncate one edge.
+        assert!(!g.aligned([62, 221, 185, 286])); // Floating red item artwork.
+        for x in [33, 118, 203, 288, 373, 458] {
+            for y in 93..410 {
+                image.put_pixel(x, y, image::Rgb([96, 96, 96]));
+            }
+        }
+        for y in [76, 93, 178, 263, 348] {
+            for x in 33..459 {
+                image.put_pixel(x, y, image::Rgb([96, 96, 96]));
+            }
+        }
+        let g = inventory_grid(&image, [35, 42, 100, 20]).unwrap();
+        assert_eq!(g.top, Some(93.)); // Header separator at 76 is not a slot edge.
+    }
+    #[test]
     fn real_panels() {
         let mut t = Tracker::new(Config::default()).unwrap();
         let base = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../tests/fixtures");
@@ -955,7 +1127,11 @@ mod tests {
             .unwrap()
             .to_rgb8();
         t.scan(&moon, [34, 155, 110, 29]).unwrap();
-        assert!(!t.scan(&moon, [34, 155, 110, 29]).unwrap().is_empty());
+        assert!(
+            !t.scan(&moon, [34, 155, 110, 29]).unwrap().is_empty(),
+            "{:?}",
+            t.candidates
+        );
     }
     #[test]
     fn temporal_regions() {

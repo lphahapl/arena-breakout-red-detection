@@ -1,5 +1,5 @@
 {
-  "created": "2026-10-04",
+  "created": "2026-10-05",
   "files": [
     {
       "file": ".cargo/config.toml",
@@ -18,8 +18,8 @@
     },
     {
       "file": "CHANGELOG.md",
-      "bytes": 1723,
-      "sha256": "c918b62e9ae100284f7fac920c84ecdfd08f20f9ad974eaef533219202af47c8"
+      "bytes": 2003,
+      "sha256": "8fde31225b262c2bbc53b28bd25533dcb478b7da131f3a4bf9fa2bef0a155a7c"
     },
     {
       "file": "PYTHON_DEPRECATED.md",
@@ -28,8 +28,8 @@
     },
     {
       "file": "README.md",
-      "bytes": 35326,
-      "sha256": "8dcc5809337c41df22041fd6f004acb787d091324cb6c010aa7efe642607a7fe"
+      "bytes": 38586,
+      "sha256": "868b6c53c5892fff4be4d1fb34ea95fcd3e89d82a5587d8b5c3b45bf5303a659"
     },
     {
       "file": "capture.py",
@@ -82,6 +82,11 @@
       "sha256": "42d669f3741bf355d2168f71e301bb40200931662158d4d488c079e537df5481"
     },
     {
+      "file": "docs/长笛滑板与观战状态修复验证.md",
+      "bytes": 3805,
+      "sha256": "4e20db4e2eb7ee2df83c8568442977f974d0ee0444f15779b32b8e53a20cf20b"
+    },
+    {
       "file": "docs/验证报告.md",
       "bytes": 6171,
       "sha256": "b82750dffc1c6799a17a29643d3ffc05bb2c922aa1835b6b84b4b463492cc66e"
@@ -123,18 +128,18 @@
     },
     {
       "file": "native/README.md",
-      "bytes": 6375,
-      "sha256": "4095695fed54eb1aaf2d790b0a16b06809e7d3cce120c150fd016d5bbb420ecb"
+      "bytes": 8222,
+      "sha256": "8c543ea113ccdfb1c6e18d27d934e102ebe3b4adfdfe7da06d4677a4eaaa0a8c"
     },
     {
       "file": "native/assets/app.css",
-      "bytes": 11401,
-      "sha256": "e769805f9836aeb4cbc79b317a998453139df69ed7222ca062cf8bf08c33af7e"
+      "bytes": 11499,
+      "sha256": "0e7ee58b7b6ceeb752f70692a2a35a29eb677bf4275d4af3ebede9a3a9e29419"
     },
     {
       "file": "native/assets/app.js",
-      "bytes": 20295,
-      "sha256": "b87a7eafaab2dfdced08b4711f8ba4f660745093c9e515f8423390721a29dbd9"
+      "bytes": 20631,
+      "sha256": "59140dbaa0f0685715bc3049c7b3eeded307c0a596aa277984869e29fd171ffe"
     },
     {
       "file": "native/assets/history.html",
@@ -158,8 +163,8 @@
     },
     {
       "file": "native/src/core.rs",
-      "bytes": 33986,
-      "sha256": "68bca82d180e59be068840779c768584fbbc4291ddda82c94021b73aabb2d9bf"
+      "bytes": 40932,
+      "sha256": "ad4fd29807543649d811a7c6d61a0c182d2ccde40650841c70c7638199725f79"
     },
     {
       "file": "native/src/environment.rs",
@@ -178,13 +183,18 @@
     },
     {
       "file": "native/src/main.rs",
-      "bytes": 28166,
-      "sha256": "1e46efe681e02a22361677adfc167f5daa7442a5a7d53d8fe9d5d05e4f6c50cb"
+      "bytes": 30952,
+      "sha256": "d7a04a10081bbb40898df53122de7e5b0afcefbb20c636a43402d38d5f5ff669"
+    },
+    {
+      "file": "native/src/observer.rs",
+      "bytes": 5340,
+      "sha256": "d81d55559b7f401b3d8679350fa4e074153a17185489f48c441ac0434cd9a2d1"
     },
     {
       "file": "native/src/runtime.rs",
-      "bytes": 565,
-      "sha256": "206ed1ae3046501cd8a1df312c45bbe85c15576c6c9c984dda1284cae971ba7b"
+      "bytes": 1268,
+      "sha256": "337b487dda60ea4b5c4a85a467eff05f5fc62d26f07ce0a9a68a99922ce940f5"
     },
     {
       "file": "native/src/stats.rs",
@@ -340,6 +350,11 @@
       "file": "tests/native_live_qa.py",
       "bytes": 5189,
       "sha256": "daeccf4eb6c940568f9c9ca0168897599ca5481e23d6f6d51de1c3c9896e3a4a"
+    },
+    {
+      "file": "tests/native_observer_qa.py",
+      "bytes": 6311,
+      "sha256": "837c31d1e21cffdbfbc87603decff0683277cc5b795ba0e927de868f03ff2ebb"
     },
     {
       "file": "tests/native_qa.py",

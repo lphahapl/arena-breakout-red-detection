@@ -4,6 +4,7 @@ mod core;
 mod environment;
 mod feedback;
 mod keyword_filter;
+mod observer;
 mod runtime;
 mod stats;
 mod storage;
@@ -34,7 +35,20 @@ struct App {
     export_lock: Mutex<()>,
 }
 fn initial() -> Value {
-    json!({"running":false,"state":"IDLE","streak":0,"total":0,"current":null,"target":null,"error":null,"misses":0,"miss_need":3,"obs":0,"ocr_ms":0.,"ocr_calls":0,"foreground":true,"run_dir":null})
+    json!({"running":false,"state":"IDLE","play_state":"CHECKING","play_state_text":"等待开始检测","recording_paused":true,"mode_keywords":[],"mode_ocr_calls":0,"mode_ocr_ms":0.,"streak":0,"total":0,"current":null,"target":null,"error":null,"misses":0,"miss_need":3,"obs":0,"ocr_ms":0.,"ocr_calls":0,"foreground":true,"run_dir":null})
+}
+fn check_mode(
+    window: &capture::Window,
+    observer: &mut observer::Observer,
+    engine: &core::Engine,
+) -> Result<()> {
+    let rect = capture::region(window, Some(observer::FOOTER_ROI))?;
+    if capture::visible(window, rect) {
+        observer.check(engine, &capture::grab(rect)?)?;
+    } else {
+        observer.unavailable();
+    }
+    Ok(())
 }
 fn metrics(t: &Tracker, obs: usize, busy: f64) -> Value {
     json!({"obs":obs,"ocr_calls":t.ocr_calls,"ocr_ms":if t.ocr_calls>0{t.ocr_ms_total/t.ocr_calls as f64}else{0.},"item_ocr_calls":t.item_ocr_calls,"item_ocr_ms":if t.item_ocr_calls>0{t.item_ms_total/t.item_ocr_calls as f64}else{0.},"text_cache_hits":t.text_cache_hits,"cycle_avg_ms":if obs>0{busy/obs as f64}else{0.}})
@@ -102,6 +116,7 @@ fn work_loop(app: &App, run: &str) -> Result<Value> {
         .work_region
         .or(Some([1. - cfg.right_frac, 0., cfg.right_frac, 1.]));
     let mut tr = Tracker::new(cfg.clone())?;
+    let mut observer = observer::Observer::new();
     let mut seq = 0;
     let mut obs = 0;
     let mut busy = 0.;
@@ -115,6 +130,7 @@ fn work_loop(app: &App, run: &str) -> Result<Value> {
             let begin = Instant::now();
             let rect = capture::region(&window, roi)?;
             if !capture::visible(&window, rect) {
+                observer.unavailable();
                 if tr.session.is_some() {
                     let step = tr.end("窗口遮挡", true);
                     record(app, run, &mut seq, &step, snapshot.as_ref(), &tr)?;
@@ -125,6 +141,7 @@ fn work_loop(app: &App, run: &str) -> Result<Value> {
                 state["foreground"] = json!(false);
                 state["current"] = Value::Null;
                 state["state"] = json!("IDLE");
+                overlay(&mut state, observer.status());
                 drop(state);
                 thread::sleep(Duration::from_millis(250));
                 continue;
@@ -132,7 +149,38 @@ fn work_loop(app: &App, run: &str) -> Result<Value> {
             let frame = capture::grab(rect)?;
             let capture_ms = begin.elapsed().as_secs_f64() * 1000.;
             let detect = Instant::now();
-            let step = tr.step(&frame)?;
+            let checked = observer.due();
+            if checked {
+                check_mode(&window, &mut observer, &tr.engine)?;
+            }
+            let previous_counts = (tr.total, tr.streak);
+            let mut step = if observer.paused() {
+                tr.pause(observer.reason())
+            } else {
+                tr.step(&frame)?
+            };
+            // Refresh before committing an opening or settlement. A cached normal
+            // state must not admit someone else's safe when spectator UI appears.
+            if step.kind.is_some() && !checked && !observer.paused() {
+                check_mode(&window, &mut observer, &tr.engine)?;
+                if observer.paused() {
+                    let newly_opened = step.kind.as_deref() == Some("start");
+                    if tr.session.is_some() {
+                        step = tr.pause(observer.reason());
+                    } else if let Some(s) = step.session.as_mut() {
+                        // Undo settlement counters; this interrupted observation is excluded.
+                        tr.total = previous_counts.0;
+                        tr.streak = previous_counts.1;
+                        s.end_reason = Some(observer.reason().into());
+                        step.kind = Some("incomplete".into());
+                        tr.pause(observer.reason());
+                    }
+                    if newly_opened {
+                        step.kind = None;
+                        step.session = None;
+                    }
+                }
+            }
             let detect_ms = detect.elapsed().as_secs_f64() * 1000.;
             obs += 1;
             if step.visible {
@@ -153,19 +201,21 @@ fn work_loop(app: &App, run: &str) -> Result<Value> {
             }
             let cycle_ms = begin.elapsed().as_secs_f64() * 1000.;
             busy += cycle_ms;
-            let m = metrics(&tr, obs, busy);
+            let mut m = metrics(&tr, obs, busy);
+            overlay(&mut m, observer.status());
             {
                 let mut s = app.state.lock().unwrap();
                 overlay(&mut s, m.clone());
+                overlay(&mut s, observer.status());
                 overlay(
                     &mut s,
-                    json!({"foreground":true,"state":if tr.session.is_some(){"SESSION"}else{"IDLE"},"current":tr.session,"streak":tr.streak,"total":tr.total,"misses":tr.misses,"capture_ms":capture_ms,"detect_ms":detect_ms,"cycle_ms":cycle_ms,"target":window.title}),
+                    json!({"foreground":true,"state":if observer.paused(){observer.state()}else if tr.session.is_some(){"SESSION"}else{"IDLE"},"current":tr.session,"streak":tr.streak,"total":tr.total,"misses":tr.misses,"capture_ms":capture_ms,"detect_ms":detect_ms,"cycle_ms":cycle_ms,"target":window.title}),
                 );
             }
             writeln!(
                 trace,
                 "{}",
-                json!({"t":core::now(),"state":if tr.session.is_some(){"SESSION"}else{"IDLE"},"visible":step.visible,"score":tr.score,"event":step.kind,"candidates":tr.candidates,"capture_ms":capture_ms,"detect_ms":detect_ms,"cycle_ms":cycle_ms,"ocr_calls":tr.ocr_calls})
+                json!({"t":core::now(),"state":if observer.paused(){observer.state()}else if tr.session.is_some(){"SESSION"}else{"IDLE"},"mode":observer.status(),"visible":step.visible,"score":tr.score,"event":step.kind,"candidates":tr.candidates,"capture_ms":capture_ms,"detect_ms":detect_ms,"cycle_ms":cycle_ms,"ocr_calls":tr.ocr_calls})
             )?;
             if flush.elapsed().as_secs() > 2 || step.kind.is_some() {
                 trace.flush()?;
@@ -175,7 +225,9 @@ fn work_loop(app: &App, run: &str) -> Result<Value> {
                 app.store.update(run, json!({"metrics":m}))?;
                 update = Instant::now();
             }
-            thread::sleep(Duration::from_secs_f64(if tr.session.is_some() {
+            thread::sleep(Duration::from_secs_f64(if observer.paused() {
+                0.25
+            } else if tr.session.is_some() {
                 cfg.session_interval.max(0.001).min(cfg.interval)
             } else {
                 cfg.interval.max(0.02)
@@ -195,7 +247,8 @@ fn work_loop(app: &App, run: &str) -> Result<Value> {
         record(app, run, &mut seq, &step, snapshot.as_ref(), &tr)?;
     }
     trace.flush()?;
-    let m = metrics(&tr, obs, busy);
+    let mut m = metrics(&tr, obs, busy);
+    overlay(&mut m, observer.status());
     overlay(&mut app.state.lock().unwrap(), m.clone());
     outcome?;
     Ok(m)
@@ -629,20 +682,26 @@ fn cli(args: &[String]) -> Result<bool> {
                 vec![path.clone(); 4]
             };
             let mut events = vec![];
+            let mut observer = observer::Observer::new();
             for file in files {
                 let im = image::open(&file)?.to_rgb8();
+                observer.check(&t.engine, &observer::Observer::footer(&im))?;
                 let work = core::crop(
                     &im,
                     core::work_rect(&cfg, im.width() as i32, im.height() as i32),
                 );
-                let s = t.step(&work)?;
+                let s = if observer.paused() {
+                    t.pause(observer.reason())
+                } else {
+                    t.step(&work)?
+                };
                 if s.kind.is_some() {
                     events.push(json!({"file":file,"kind":s.kind,"session":s.session}));
                 }
             }
             println!(
                 "{}",
-                json!({"events":events,"current":t.session,"candidates":t.candidates,"total":t.total})
+                json!({"events":events,"current":t.session,"candidates":t.candidates,"total":t.total,"mode":observer.status()})
             );
         }
         return Ok(true);
