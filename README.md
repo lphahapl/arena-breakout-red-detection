@@ -4,6 +4,7 @@
 
 当前最新正式版是 **Rust v0.3.6，Windows x64**。**Python v0.2.2 暂时标记废弃，停止更新；后续只维护 Rust。** 仓库保留 Python 和各历史版本源码用于归档。实现采用 Windows OCR、图像颜色与几何规则、模板跟踪和多帧确认，识别过程在本机完成。
 
+- [1～6格合成压力测试：当前规则已知失败项](docs/合成格子压力测试.md)
 - [最新 Release](https://github.com/lphahapl/arena-breakout-red-detection/releases/latest)
 - [Rust v0.3.6 Windows x64 下载](https://github.com/lphahapl/arena-breakout-red-detection/releases/download/v0.3.6/arena-breakout-red-detection-v0.3.6-windows-x64.zip)
 - [v0.3.6 修复与发布验证](docs/v0.3.6验证.md)

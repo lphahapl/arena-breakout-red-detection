@@ -15,3 +15,5 @@ settings.json
 .env
 .env.*
 exports/
+
+tests/synthetic-slots/

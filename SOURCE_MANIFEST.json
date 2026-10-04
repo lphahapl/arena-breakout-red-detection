@@ -13,8 +13,8 @@
     },
     {
       "file": ".gitignore",
-      "bytes": 152,
-      "sha256": "f60f4f58d35ffc3c5075ec56fa8a753020b84101b7511ee1290fe089748a83c5"
+      "bytes": 178,
+      "sha256": "c29da3b2aba5bffc8544e34c719c6b833178c687bbd241d6269e70948343fa2c"
     },
     {
       "file": "CHANGELOG.md",
@@ -28,8 +28,8 @@
     },
     {
       "file": "README.md",
-      "bytes": 38630,
-      "sha256": "129e45556e1ddcd48ef43e8cdad1d692d9b4763c44af1ac978a54d234f154cd4"
+      "bytes": 38726,
+      "sha256": "3b1bbaeb6ac88949802a8644a4bb31ebebfc1945dbe1c46f95872e78323a1aa5"
     },
     {
       "file": "capture.py",
@@ -40,6 +40,21 @@
       "file": "detect.py",
       "bytes": 44602,
       "sha256": "a6fc3b5a864e5c8bed94a7a1248defd088c7bf76375df1334adefb25199e39d4"
+    },
+    {
+      "file": "docs/synthetic-negative.png",
+      "bytes": 42246,
+      "sha256": "5b35fc84cf0ed5e78bfa90c76ab700553d894b38a6bbf29b81ff02b524897134"
+    },
+    {
+      "file": "docs/synthetic-positive.png",
+      "bytes": 81434,
+      "sha256": "41fd0900ac2e4fb614665be0035598fba5a617ee7ed63cf4e8c5b0a07c9379f7"
+    },
+    {
+      "file": "docs/synthetic-slots-summary.json",
+      "bytes": 406,
+      "sha256": "7e76648acbc5a12ff5e89f49d3633d257e98c2806e7201334cc6020731eb379e"
     },
     {
       "file": "docs/v0.3.3验证.md",
@@ -65,6 +80,11 @@
       "file": "docs/关键词屏蔽验证.md",
       "bytes": 2211,
       "sha256": "7ac3ebb5ce7e430e3a282a1b76339989dbddb319bd873c2fc1de397ecb51fc95"
+    },
+    {
+      "file": "docs/合成格子压力测试.md",
+      "bytes": 3886,
+      "sha256": "2379e65b3bed36bcf2fe8c0580ca440bd914b9c595ebb72bcf27b6bfcbf6017b"
     },
     {
       "file": "docs/唱片机词表修补验证.md",
@@ -365,6 +385,11 @@
       "file": "tests/native_qa.py",
       "bytes": 3343,
       "sha256": "10731245f0540022100e4e83ec2b497a39136d9919adb9b1ccda0355aa68d39b"
+    },
+    {
+      "file": "tests/synthetic_slots.py",
+      "bytes": 9843,
+      "sha256": "65c9f56e83fd46ebfe618b33b6e35db5fbb9ae8e44348718c8293d6abcbb0fc9"
     },
     {
       "file": "tests/test_accuracy.py",
