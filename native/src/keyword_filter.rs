@@ -66,6 +66,20 @@ mod tests {
         assert!(!matches("航天实验", &words));
     }
     #[test]
+    fn record_player_is_excluded_without_blocking_other_names() {
+        let words = defaults();
+        assert!(matches("唱片机", &words));
+        // Both OCR scales are concatenated before checking the configured words.
+        assert!(matches("埕片机唱片机", &words));
+        for name in ["航天导航仪", "古董花瓶", "古董茶壶", "珍藏唱片"] {
+            assert!(!matches(name, &words), "{name}");
+        }
+        assert!(!matches(
+            "唱片机",
+            &parse("{\"exclude_words\":[]}").unwrap()
+        ));
+    }
+    #[test]
     fn editable_rules_and_empty_list() {
         let words = parse("\u{feff}{\"exclude_words\":[\"定制词\",\"定制词\"]}").unwrap();
         assert_eq!(words.len(), 1);

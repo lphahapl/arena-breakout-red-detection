@@ -63,12 +63,19 @@ with tempfile.TemporaryDirectory() as directory:
         # Let the short-lived preparation thread finish before invoking cached factories.
         time.sleep(.5)
         for cycle in range(3):
+            # Changing the file is applied on the next start in this same process.
+            words = [['实验室','行星','唱片机'], [], ['唱片机']][cycle]
+            (base/'red_filter.json').write_text(json.dumps({'exclude_words':words},ensure_ascii=False),encoding='utf-8')
             assert api('/api/start',{})['started']
             def observed():
                 state=api('/api/status')
                 assert not state['error'],state['error']
                 return state['running'] and state['obs']>=3
             wait_for(observed,'actual screenshot/OCR progress')
+            run_id=api('/api/status')['run_dir']
+            assert api('/api/run?run='+run_id)['config']['red_exclude_words']==words
+            (base/'red_filter.json').write_text(json.dumps({'exclude_words':['pending']}),encoding='utf-8')
+            assert api('/api/run?run='+run_id)['config']['red_exclude_words']==words
             with ThreadPoolExecutor(max_workers=3) as pool:
                 for _ in range(4):
                     results=list(pool.map(api,['/api/status','/api/history','/api/stats']))
@@ -85,6 +92,7 @@ with tempfile.TemporaryDirectory() as directory:
         histories=api('/api/history')['runs']
         assert len(histories)==3 and all(r['status']=='stopped' for r in histories),histories
         print('PASS three real capture/OCR starts, concurrent status/history/stats, stops and environment retries',flush=True)
+        print('PASS JSON exclusions reload on each start without restarting backend; current run keeps its snapshot',flush=True)
     finally:
         if process and process.poll() is None:
             try:api('/api/quit',{})

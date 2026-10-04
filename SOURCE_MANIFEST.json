@@ -1,5 +1,5 @@
 {
-  "created": "2026-10-02",
+  "created": "2026-10-04",
   "files": [
     {
       "file": ".cargo/config.toml",
@@ -18,8 +18,8 @@
     },
     {
       "file": "CHANGELOG.md",
-      "bytes": 1492,
-      "sha256": "3c422bbe918a8d5c9087200615b81609aa143d04c4991db739b348f34c850408"
+      "bytes": 1723,
+      "sha256": "c918b62e9ae100284f7fac920c84ecdfd08f20f9ad974eaef533219202af47c8"
     },
     {
       "file": "PYTHON_DEPRECATED.md",
@@ -28,8 +28,8 @@
     },
     {
       "file": "README.md",
-      "bytes": 34677,
-      "sha256": "5bd8d7fdc399eda4899e36a7681d0a32cdb0c5d55be266beb9d135085d31d8ec"
+      "bytes": 35326,
+      "sha256": "8dcc5809337c41df22041fd6f004acb787d091324cb6c010aa7efe642607a7fe"
     },
     {
       "file": "capture.py",
@@ -60,6 +60,11 @@
       "file": "docs/关键词屏蔽验证.md",
       "bytes": 2211,
       "sha256": "7ac3ebb5ce7e430e3a282a1b76339989dbddb319bd873c2fc1de397ecb51fc95"
+    },
+    {
+      "file": "docs/唱片机词表修补验证.md",
+      "bytes": 1727,
+      "sha256": "e2a5f41b60fe2a8e9f9c98485e2470855c555b213a0c8a42f42cd00c72b076dc"
     },
     {
       "file": "docs/早期开发说明.md",
@@ -118,8 +123,8 @@
     },
     {
       "file": "native/README.md",
-      "bytes": 5905,
-      "sha256": "fbc36bc4a13a895b60cde68e2ba3ef02a4840b9c312b3198a033eb51d9e7fecb"
+      "bytes": 6375,
+      "sha256": "4095695fed54eb1aaf2d790b0a16b06809e7d3cce120c150fd016d5bbb420ecb"
     },
     {
       "file": "native/assets/app.css",
@@ -153,8 +158,8 @@
     },
     {
       "file": "native/src/core.rs",
-      "bytes": 33916,
-      "sha256": "2696331441997007e31184727c05d3620f64cbd1211fad5a828e222b4c4f6ef8"
+      "bytes": 33986,
+      "sha256": "68bca82d180e59be068840779c768584fbbc4291ddda82c94021b73aabb2d9bf"
     },
     {
       "file": "native/src/environment.rs",
@@ -168,8 +173,8 @@
     },
     {
       "file": "native/src/keyword_filter.rs",
-      "bytes": 3655,
-      "sha256": "3faf6ac06d009cd3ace46be4b79cc4263c4f214636de1b4b982846fb20eb7843"
+      "bytes": 4228,
+      "sha256": "17d6a494a2bf3603c540f27ef9401233764858d11eb7190e9508ccf954434723"
     },
     {
       "file": "native/src/main.rs",
@@ -198,8 +203,8 @@
     },
     {
       "file": "red_filter.json",
-      "bytes": 47,
-      "sha256": "bdcf79e27af4d14f56dde9e97ba02e1e761065f01ebba3f26a7ccc55dc996afe"
+      "bytes": 60,
+      "sha256": "de80e330a45270dcbeba7a54101d2932c3917871c3a94db6ae1642d30790f0c7"
     },
     {
       "file": "red_filter.py",
@@ -333,8 +338,8 @@
     },
     {
       "file": "tests/native_live_qa.py",
-      "bytes": 4446,
-      "sha256": "6657d7e68701e45dd1232fbd4e582251df1a4f72653ca4666709fd73cffa19ef"
+      "bytes": 5189,
+      "sha256": "daeccf4eb6c940568f9c9ca0168897599ca5481e23d6f6d51de1c3c9896e3a4a"
     },
     {
       "file": "tests/native_qa.py",

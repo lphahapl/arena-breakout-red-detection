@@ -845,6 +845,7 @@ mod tests {
             ("feedback_laptop.png", [35, 42, 107, 21], false),
             ("feedback_coin.png", [28, 30, 82, 15], false),
             ("feedback_gyro.png", [37, 56, 106, 28], true),
+            ("feedback_record_player.png", [48, 42, 107, 21], false),
         ] {
             let image = image::open(base.join(file)).unwrap().to_rgb8();
             let mut tracker = Tracker::new(Config::default()).unwrap();
