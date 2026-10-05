@@ -1,0 +1,31 @@
+{
+  "two_slot_regression": {
+    "total": 72,
+    "horizontal_two": 24,
+    "vertical_two": 24,
+    "single_rejected": 24,
+    "failed": []
+  },
+  "stress_summary": {
+    "seed": 20261005,
+    "total": 516,
+    "positive_total": 336,
+    "positive_pass": 264,
+    "negative_total": 180,
+    "negative_pass": 96,
+    "failure_count": 156,
+    "partial_footprints": 72,
+    "failures_by_shape": {
+      "1x1": 24,
+      "5x1": 24,
+      "6x1": 24,
+      "L": 12,
+      "T": 12,
+      "U": 12,
+      "cross": 12,
+      "triangle": 12,
+      "circle": 12,
+      "diagonal": 12
+    }
+  }
+}
