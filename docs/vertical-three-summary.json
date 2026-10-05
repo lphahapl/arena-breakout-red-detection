@@ -1,0 +1,51 @@
+{
+  "before": {
+    "total": 144,
+    "pass": 16,
+    "min_iou": 0.0
+  },
+  "after": {
+    "total": 144,
+    "pass": 144,
+    "min_iou": 1.0,
+    "failed": []
+  },
+  "two_slot_regression": {
+    "total": 72,
+    "horizontal_two": 24,
+    "vertical_two": 24,
+    "single_rejected": 24,
+    "failed": []
+  },
+  "stress": {
+    "seed": 20261005,
+    "total": 516,
+    "positive_total": 336,
+    "positive_pass": 216,
+    "negative_total": 180,
+    "negative_pass": 96,
+    "failure_count": 204,
+    "partial_footprints": 0,
+    "failures_by_shape": {
+      "1x1": 24,
+      "1x5": 24,
+      "5x1": 24,
+      "1x6": 24,
+      "6x1": 24,
+      "L": 12,
+      "T": 12,
+      "U": 12,
+      "cross": 12,
+      "triangle": 12,
+      "circle": 12,
+      "diagonal": 12
+    }
+  },
+  "live_vertical_box": [
+    42,
+    196,
+    73,
+    223
+  ],
+  "rust_tests_passed": 24
+}
